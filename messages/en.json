@@ -1,0 +1,98 @@
+{
+  "Metadata": {
+    "description": "Nuwa Character Editor",
+    "title": "Character Editor | Nuwa"
+  },
+  "Footer": {
+    "nuwaLabs": "Nuwa Labs",
+    "protocol": "Protocol",
+    "codeAddress": "Github"
+  },
+  "Header": {
+    "nuwaLabs": "Nuwa Labs",
+    "roleai": "role.ai",
+    "BRC-1111": "BRC-1111"
+  },
+  "Navigation": {
+    "voiceasset": "Voice Asset",
+    "workstation": "Work Station",
+    "myvoicemodels": "My Voice Models",
+    "publishedvoices": "Published Voices"
+  },
+  "Settings": {
+    "DELETE": "Delete!",
+    "DelDone": "Data has been cleared, please refresh your browser.",
+    "changelanguage": "Change Language",
+    "clearalldata": "Clear All Data",
+    "close": "Close",
+    "darkmode": "Dark Mode",
+    "displaylanguage": "Display Language",
+    "haveyoureallythoughtthisthrough": "Have you really thought this through?",
+    "hazardousoperations": "Hazardous Operations",
+    "idecidedtotry": "I decided to try",
+    "ifyouhaveproblemsusingityoucantry": "If you have problems using it, you can try",
+    "imsure": "I'm sure.",
+    "settingthedisplayofthewebsite": "Setting the Website Display",
+    "thisoperationsisirrevocable": "Continue: This operation is irrevocable",
+    "websitedisplaysettings": "Website Display Settings",
+    "title": "Settings",
+    "feedback": "Feedback",
+    "contactus": "Contact Us",
+    "clear": "Clear Cache",
+    "clearbtn": "clear"
+  },
+  "Overview": {
+    "title1": "Based on HomoDeus Protocol",
+    "title2": "Nuwa Creation Platform",
+    "title3": "a free, powerful, and open sourced character creation tool",
+    "nuwaLabs": "Nuwa Labs",
+    "quickstart": "Quick Start",
+    "understandandlearn": "Resources",
+    "createDigitalLife": "Create",
+    "createDigitalLife2": "Digital Life",
+    "createWorldBook": "Create",
+    "createWorldBook2": "World Book",
+    "readDigitalLife": "Load Digital Life",
+    "readDigitalLifetip": "Please upload a png file",
+    "readWorldBook": "Load World Book",
+    "readWorldBooktip": "Please upload a json file",
+    "morebtn": "More",
+    "understandandlearnListItem1": "How to design a character",
+    "understandandlearnListItem2": "How to manage characters",
+    "understandandlearnListItem3": "How to select the right model",
+    "understandandlearnListItem4": "How to write a good world book",
+    "understandandlearnListItem5": "Hotkeys"
+  },
+  "Me": {
+    "title": "My Profile",
+    "usename": "User Name",
+    "usenametoken": "Type User Name here.",
+    "email": "Email",
+    "emailtoken": "Type Email here.",
+    "web3wallet": "Web3 Wallet",
+    "web3walletbtn": "Connect",
+    "updatepassword": "Update Password",
+    "updatepasswordbtn": "Update",
+    "deleteaccount": "Delete Account",
+    "deleteaccountbtn": "Delete",
+    "logoutbtn": "Log Out",
+    "savebtn": "Save"
+  },
+  "Web3": {
+    "changewallet": "Change wallet",
+    "connecting": "Connecting ...",
+    "copyaddress": "Copy address",
+    "copied": "Copied",
+    "disconnect": "Disconnect",
+    "haswallet": "Connect",
+    "nowallet": "Select Wallet",
+    "modeltitle": "Connect a wallet on Solana to continue",
+    "detected": "Detected"
+  },
+  "Error": {
+    "localstoragefull": "The local storage space is full. Please delete it and perform operations again",
+    "draftscharacterlimit": "Limit 3",
+    "uploadfailed": "Upload failed.",
+    "invalidfile": "Invalid file."
+  }
+}
