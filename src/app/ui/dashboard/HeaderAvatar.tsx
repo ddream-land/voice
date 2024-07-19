@@ -44,7 +44,7 @@ export default function HeaderAvatar() {
         }}
         onLogin={() => {
           setIsOpen(false);
-          gotoMePage()
+          // gotoMePage()
         }}
       />
     </>

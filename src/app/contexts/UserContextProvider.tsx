@@ -9,8 +9,6 @@ import { useContext } from "react";
 export const UserContext = createContext<TypeUser>(null as any);
 export const UserDispatchContext = createContext(null as any);
 
-
-
 export function UserContextProvider({ children, value }: {children: React.ReactNode, value: TypeUser}) {
   
   const [user, dispatch] = useReducer(

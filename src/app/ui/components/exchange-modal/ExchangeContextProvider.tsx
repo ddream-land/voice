@@ -11,7 +11,7 @@ const initialState : ExchangeModalProps = { isOpen: false };
 
 export function ExchangeContextProvider({ children }: {children: React.ReactNode}) {
   const [props , dispatch] = useImmerReducer(
-    loginReducer,
+    exchangeReducer,
     initialState
   );
 
@@ -38,7 +38,7 @@ export function useExchangeDispatch() {
   return useContext(ExchangeDispatchContext);
 }
 
-function loginReducer(draft: ExchangeModalProps, action: any) {
+function exchangeReducer(draft: ExchangeModalProps, action: any) {
   switch (action.type) {
     case 'open': {
       draft.isOpen = true;

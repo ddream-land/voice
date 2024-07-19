@@ -1183,10 +1183,10 @@
     eip1193-provider "^1.0.1"
     js-sha3 "^0.8.0"
 
-"@ddreamland/common@^0.0.31":
-  version "0.0.31"
-  resolved "https://registry.npmjs.org/@ddreamland/common/-/common-0.0.31.tgz"
-  integrity sha512-AUvEyqRjx06sAzDnT4/43L+RgbVm2KFLPjxChRADyXL0oI3HjIahalJIgFHOkCPVyeSViF0c+hklfDlK12rgnQ==
+"@ddreamland/common@^0.0.32":
+  version "0.0.32"
+  resolved "https://registry.npmjs.org/@ddreamland/common/-/common-0.0.32.tgz"
+  integrity sha512-spt0Fbj1ImnHWbTbZoUVrtbzc+kWW4iXQtX1BCU7ITj79340vAbY55RwNN5excirMHAYzM+p5je0v3Re1uuNxw==
   dependencies:
     "@heroicons/react" "^2.1.3"
     "@lottiefiles/dotlottie-react" "^0.6.5"

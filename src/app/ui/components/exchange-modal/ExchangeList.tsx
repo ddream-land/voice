@@ -1,27 +1,34 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { getFinanceSales } from "@/app/lib/finance.api";
+import { financeExchange, getFinanceSales } from "@/app/lib/finance.api";
 import { FinanceProductType } from "@/app/lib/definitions.finance";
 import WholeNoteIcon from "@/app/icons/WholeNoteIcon";
 import BlackWholeNoteIcon from "@/app/icons/BlackWholeNoteIcon";
+import { Button, Skeleton } from "@nextui-org/react";
+import ExchangeItem from "./ExchangeItem";
+import { useExchangeDispatch } from "./ExchangeContextProvider";
+import { useAmDispatch } from "../alter-message/AlterMessageContextProvider";
 
 
-export type ExchangeProps = {
+export type ExchangeListProps = {
   locale?: 'en' | 'zh-CN'
-  onChange?: () => void
+  onSuccess?: () => void
 }
 
 function ExchangeList({
   locale = 'en',
-  onChange,
-}: ExchangeProps) {
+  onSuccess,
+}: ExchangeListProps) {
   
+  const exchangeDispatch = useExchangeDispatch();
 
   const [isGetFinanceSalesing, setIsGetFianceSalesing] = useState(false)
   const [productList, setProductList] = useState<Array<FinanceProductType>>([])
-  const getFinanceSalesApi = getFinanceSales()
+  const [selectedId, setSelectedId] = useState<string>('')
+  const amDispatch = useAmDispatch();
 
+  const getFinanceSalesApi = getFinanceSales()
   const getBagsApiServer = async () => {
     if (isGetFinanceSalesing) return
     setIsGetFianceSalesing(true)
@@ -39,46 +46,99 @@ function ExchangeList({
     getBagsApiServer();
   }, [])
 
+
+  const [exchangeing, setExchangeing] = useState<boolean>(false)
+  const financeExchangeApi = financeExchange()
+  const financeExchangeServer = async () => {
+    if (exchangeing) return
+    setExchangeing(true)
+    const res = await financeExchangeApi.send({
+      package_id: selectedId
+    });
+    if (res && res.code === 0) {
+      amDispatch({
+        type: "add",
+        payload: {
+          message: 'exchange success',
+          type: "success"
+        },
+      })
+      onSuccess && onSuccess();
+    }
+
+    setExchangeing(false)
+  }
+
+  const onSubmitHandler = () => {
+    financeExchangeServer();
+  }
   
   return (
     <div className="px-[96px]">
       <div className="py-[70px] flex flex-row items-end justify-center">
         <WholeNoteIcon className="w-[35px] h-[35px]" /><span className="text-white text-2xl font-normal leading-normal">兑换后，音符+42</span>
       </div>
-      <div className="flex flex-row gap-5 relative">
+      <div className="flex flex-row gap-5 relative justify-center">
         {productList.map((product) => (
-          <div className="flex flex-col gap-2 items-center justify-center">
-            <div className="w-[180px] h-60 rounded-2xl border border-lime-300 bg-gradient-to-tl from-black to-neutral-800">
-              <div className="bg-[url('/imgs/exchange-bg.png')] bg-cover w-full h-full flex flex-col-reverse items-center justify-start">
-                <div className="text-center text-gray-200 text-[42px] font-bold  my-6">+{product.product_num}</div>
-                <WholeNoteIcon className="w-[58px] h-[58px]" />
-              </div>
-
-              <div className="left-0 -top-6 absolute h-7 px-3 py-1 bg-gradient-to-r from-lime-300 to-cyan-400 rounded-tl-full rounded-bl-none rounded-tr-full rounded-br-full justify-center items-center flex flex-row">
-                <div className="text-center text-black text-sm font-semibold ">额外</div>
-                <BlackWholeNoteIcon className="w-[15px] h-[15px] fill-black" />
-                <div className="text-black text-sm font-semibold ">12</div>
-              </div>
-            </div>
-            <div className="flex flex-row justify-center items-center">
-              <Image
-                src='/imgs/dreamTokenIcon.png'
-                width={38}
-                height={38}
-                alt=""
-                className="h-auto w-auto flex-none object-cover"
-              />
-              <div className="text-center text-white text-2xl font-bold ">{product.price}</div>
-            </div>
-          </div>
+          <ExchangeItem
+            key={product.package_id}
+            value={product}
+            isSelected={selectedId === product.package_id}
+            onValueChange={(newSelectedId) => {
+              if (newSelectedId === selectedId) {
+                setSelectedId('')
+              } else {
+                setSelectedId(newSelectedId)
+              }
+            }}
+          />
         ))}
         
+        {productList.length === 0 && (
+          <>
+            <div className="h-[296px]">
+              <Skeleton className="rounded-2xl w-[180px] h-[238px]">
+                <div className="w-full h-full rounded-2xl bg-secondary"></div>
+              </Skeleton>
+            </div>
+            <div className="h-[296px]">
+              <Skeleton className="rounded-2xl w-[180px] h-[238px]">
+                <div className="w-full h-full rounded-2xl bg-secondary"></div>
+              </Skeleton>
+            </div>
+            <div className="h-[296px]">
+              <Skeleton className="rounded-2xl w-[180px] h-[238px]">
+                <div className="w-full h-full rounded-2xl bg-secondary"></div>
+              </Skeleton>
+            </div>
+            <div className="h-[296px]">
+              <Skeleton className="rounded-2xl w-[180px] h-[238px]">
+                <div className="w-full h-full rounded-2xl bg-secondary"></div>
+              </Skeleton>
+            </div>
+            <div className="h-[296px]">
+              <Skeleton className="rounded-2xl w-[180px] h-[238px]">
+                <div className="w-full h-full rounded-2xl bg-secondary"></div>
+              </Skeleton>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="w-full flex flex-row items-center justify-center mt-[52px] mb-[42px]">
-        <div className="w-[313px] h-[62px] bg-gradient-to-r from-lime-300 to-cyan-400 rounded-2xl flex flex-row items-center justify-center cursor-pointer">
-          <div className="text-black text-2xl font-semibold  leading-normal">兑换</div>
-        </div>
+        <Button
+          isDisabled={selectedId === ''}
+          color="primary"
+          variant="solid"
+          className="w-[313px] h-[62px] bg-gradient-to-r from-lime-300 to-cyan-400 rounded-2xl flex flex-row items-center justify-center cursor-pointer text-black text-2xl"
+          onPress={() => {
+            if (selectedId) {
+              onSubmitHandler();
+            }
+          }}
+        >
+          兑换
+        </Button>
       </div>
       
     </div>

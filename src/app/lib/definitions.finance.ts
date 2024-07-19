@@ -2,6 +2,7 @@
 
 
 export type FinanceProductType = {
+  free: number,
   ori_price: number
   package_id: string
   price: number

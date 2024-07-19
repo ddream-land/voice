@@ -37,7 +37,11 @@ export default function ExchangeBags() {
           type: 'open',
           payload: {
             onClose: () => {
+              getBagsApiServer();
               exchangeDispatch({type: "close"});
+            },
+            onSuccess: () => {
+              getBagsApiServer();
             }
           },
         })

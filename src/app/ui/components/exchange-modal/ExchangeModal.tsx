@@ -42,11 +42,14 @@ function ExchangeModal({
       hideCloseButton={false}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader></ModalHeader>
             <ModalBody>
-              <ExchangeList />
+              <ExchangeList onSuccess={() => {
+                onSuccess && onSuccess();
+                onClose && onClose();
+              }} />
             </ModalBody>
           </>
         )}

@@ -4,7 +4,7 @@ import { Link, usePathname } from '@/navigation'
 import { useTranslations } from 'next-intl'
 import WholeNoteIcon from '@/app/icons/WholeNoteIcon'
 import { DDLSidebar } from '@ddreamland/common'
-import { cn } from '@nextui-org/react'
+import { cn, Skeleton } from '@nextui-org/react'
 import VoiceAssetIcon from '@/app/icons/VoiceAssetIcon'
 import { BeakerIcon } from '@heroicons/react/24/solid'
 import DCubeIcon from '@/app/icons/3DCubeIcon'
@@ -63,25 +63,23 @@ export default function Header() {
           <div className=" w-[200px] z-40 rounded-lg flex-col justify-center items-center gap-2 inline-flex">
             <div className="rounded-lg justify-start items-center gap-3 inline-flex">
               <div
-                className={`w-[320px] p-[5px] fixed top-0 left-0 bottom-0 pointer-events-none bg-transparent`}
+                className={`w-[320px] p-1 fixed top-0 left-0 bottom-0 pointer-events-none bg-transparent`}
               >
-                {initRenderClient && (
+                {initRenderClient ? (
                   <DDLSidebar
                     lang="en"
                     title={{ name: 'Voice' }}
                     minifyTimeout={0}
                     forceSize={"mini"}
                   ></DDLSidebar>
+                ) : (
+                  <Skeleton className="rounded-full w-[216px] h-[72px]">
+                    <div className="w-full h-full rounded-full bg-secondary"></div>
+                  </Skeleton>
                 )}
               </div>
-
-              {/* <div className="ml-[250px] text-slate-100 text-lg font-semibold leading-7 text-nowrap">
-                Voice Studio
-              </div> */}
             </div>
           </div>
-
-          {/* <div className="w-[2px] h-[27px] bg-white/10"></div> */}
 
           <div className="justify-start items-center gap-1 flex">
             {navigation.map((item, index) => (
