@@ -5,6 +5,8 @@ import WholeNoteIcon from "@/app/icons/WholeNoteIcon";
 import { Button } from "@nextui-org/react";
 import { InfType, InstantGenerateParamsterType, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
 import { voiceInf } from "@/app/lib/voice.api";
+import { useExchange, useExchangeDispatch } from "../exchange-modal/ExchangeContextProvider";
+import { getFinanceBags } from "@/app/lib/finance.api";
 
 function MainStationInfButton({
   isDisabled,
@@ -19,6 +21,9 @@ function MainStationInfButton({
   onSuccess: (newInf: VoiceInfHistoryType) => void
   onSendingChange?: ({sending, infType} : {sending: boolean, infType: InfType}) => void
 }) {
+
+  const exchangeDispatch = useExchangeDispatch();
+
   const [sending, setSending] = useState(false);
 
   const voiceInfApi = voiceInf();
@@ -38,6 +43,11 @@ function MainStationInfButton({
     });
     if (res && res.code === 0) {
       onSuccess(res.data.inf_info);
+      if (type === "audio") {
+        exchangeDispatch({
+          type: 'reget',
+        })
+      }
     }
 
     onSendingChange && onSendingChange({

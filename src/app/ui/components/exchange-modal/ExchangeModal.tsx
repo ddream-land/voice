@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { InfType, VoiceInfHistoryType, VoiceModelToneType } from "@/app/lib/definitions.voice";
 import ExchangeList from "./ExchangeList";
+import { useExchangeDispatch } from "./ExchangeContextProvider";
+import { getFinanceBags } from "@/app/lib/finance.api";
 
 
 export type ExchangeModalProps = {
+  value?: number,
+  regetCount: number,
   isOpen?: boolean
   locale?: 'en' | 'zh-CN'
   onClose?: () => void
@@ -14,12 +18,40 @@ export type ExchangeModalProps = {
 }
 
 function ExchangeModal({
+  value = 0,
+  regetCount = 0,
   isOpen,
   locale = 'en',
   onClose,
   onChange,
   onSuccess,
 }: ExchangeModalProps) {
+
+
+  const exchangeDispatch = useExchangeDispatch();
+
+  const [isGetFinanceBagsing, setIsGetFianceBagsing] = useState(false)
+  const getFinanceBagsApi = getFinanceBags()
+  const getBagsApiServer = async () => {
+    if (isGetFinanceBagsing) return
+    setIsGetFianceBagsing(true)
+    const res = await getFinanceBagsApi.send({});
+    if (res && res.code === 0) {
+      if (res.data && res.data['101']) {
+        // setExchangeBags(res.data['101'])
+        exchangeDispatch({
+          type: 'set',
+          payload: res.data['101']
+        })
+      }
+    }
+
+    setIsGetFianceBagsing(false)
+  }
+
+  useEffect(() => {
+    getBagsApiServer();
+  }, [regetCount])
   
   return (
     <Modal

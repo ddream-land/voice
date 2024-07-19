@@ -11,7 +11,7 @@ import { cn, Skeleton } from "@nextui-org/react";
 export type ExchangeItemProps = {
   value: FinanceProductType
   isSelected?: boolean;
-  onValueChange?: (selectedId: string) => void;
+  onValueChange?: (selected: FinanceProductType) => void;
   locale?: 'en' | 'zh-CN'
   onChange?: () => void
 }
@@ -49,12 +49,31 @@ function ExchangeItem({
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
       <div
-        onClick={() => onValueChange && onValueChange(value.package_id)}
+        onClick={() => onValueChange && onValueChange(value)}
         className={cn( isSelected ? 'border-lime-300 ' : ' border-neutral-700', 'cursor-pointer w-[180px] h-60 rounded-2xl border bg-gradient-to-tl from-black to-neutral-800 relative')}
       >
         <div className="bg-[url('/imgs/exchange-bg.png')] bg-cover w-full h-full flex flex-col-reverse items-center justify-start rounded-2xl overflow-hidden">
           <div className="text-center text-gray-200 text-[42px] font-bold  my-6">+{value.product_num}</div>
-          <WholeNoteIcon className="w-[58px] h-[58px]" />
+          {value.product_num > 100 && value.product_num < 600 && (
+            <div className="flex flex-row justify-center items-center w-full gap-1">
+              <WholeNoteIcon className="w-[58px] h-[58px]" />
+              <WholeNoteIcon className="w-[58px] h-[58px]" />
+            </div>
+          )}
+          {value.product_num < 100 && (
+            <WholeNoteIcon className="w-[58px] h-[58px]" />
+          )}
+          {value.product_num > 600 && (
+            <div className=" relative h-[92px] w-[70px] flex flex-row justify-center items-end">
+              <WholeNoteIcon className="w-[60px] h-[60px]" />
+              <div className="absolute right-0 top-0">
+                <WholeNoteIcon className="w-[33px] h-[33px]" />
+              </div>
+              <div className="absolute top-4 left-0">
+                <WholeNoteIcon className="w-9 h-9" />
+              </div>
+            </div>
+          )}
         </div>
 
         {value.free > 0 && (

@@ -21,6 +21,7 @@ import { createVoiceTrain } from "@/app/lib/voice.api";
 import { z } from "zod";
 import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { handleConfetti } from "@/app/lib/utils";
+import { useExchangeDispatch } from "../components/exchange-modal/ExchangeContextProvider";
 
 function TrainVoiceModelModal({
   isOpen = false,
@@ -46,6 +47,7 @@ function TrainVoiceModelModal({
   const [ isAgree, setIsAgree] = useState(false);
   const [ isLoading, setIsLoading ] = useState(false);
   const amDispatch = useAmDispatch();
+  const exchangeDispatch = useExchangeDispatch();
 
   const createVoiceTrainApi = createVoiceTrain();
   
@@ -68,6 +70,9 @@ function TrainVoiceModelModal({
       onDone();
       trainVoiceModelModal.onClose();
       handleConfetti()
+      exchangeDispatch({
+        type: 'reget',
+      })
     }
 
     setSending(false);
@@ -215,7 +220,7 @@ function TrainVoiceModelModal({
                   <div className="h-6 pl-1 pr-2 py-0.5 bg-green-500 rounded-md justify-center items-center gap-1 flex">
                     <WholeNoteIcon className="w-4 h-4 fill-neutral-900 stroke-neutral-900 relative" />
                     <div className="text-center text-neutral-900 text-xs font-semibold ">
-                      X 200
+                      X 400
                     </div>
                   </div>
                 }

@@ -25,7 +25,7 @@ function ExchangeList({
 
   const [isGetFinanceSalesing, setIsGetFianceSalesing] = useState(false)
   const [productList, setProductList] = useState<Array<FinanceProductType>>([])
-  const [selectedId, setSelectedId] = useState<string>('')
+  const [selectedProduct, setSelectedProduct] = useState<FinanceProductType | null>(null);
   const amDispatch = useAmDispatch();
 
   const getFinanceSalesApi = getFinanceSales()
@@ -53,7 +53,7 @@ function ExchangeList({
     if (exchangeing) return
     setExchangeing(true)
     const res = await financeExchangeApi.send({
-      package_id: selectedId
+      package_id: selectedProduct?.package_id
     });
     if (res && res.code === 0) {
       amDispatch({
@@ -83,12 +83,12 @@ function ExchangeList({
           <ExchangeItem
             key={product.package_id}
             value={product}
-            isSelected={selectedId === product.package_id}
-            onValueChange={(newSelectedId) => {
-              if (newSelectedId === selectedId) {
-                setSelectedId('')
+            isSelected={selectedProduct?.package_id === product.package_id}
+            onValueChange={(newSelected) => {
+              if (newSelected.package_id === selectedProduct?.package_id) {
+                setSelectedProduct(null)
               } else {
-                setSelectedId(newSelectedId)
+                setSelectedProduct(newSelected)
               }
             }}
           />
@@ -127,12 +127,12 @@ function ExchangeList({
 
       <div className="w-full flex flex-row items-center justify-center mt-[52px] mb-[42px]">
         <Button
-          isDisabled={selectedId === ''}
+          isDisabled={selectedProduct === null}
           color="primary"
           variant="solid"
           className="w-[313px] h-[62px] bg-gradient-to-r from-lime-300 to-cyan-400 rounded-2xl flex flex-row items-center justify-center cursor-pointer text-black text-2xl"
           onPress={() => {
-            if (selectedId) {
+            if (selectedProduct != null) {
               onSubmitHandler();
             }
           }}
