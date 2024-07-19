@@ -76,7 +76,7 @@ function ExchangeList({
   return (
     <div className="px-[96px]">
       <div className="py-[70px] flex flex-row items-end justify-center">
-        <WholeNoteIcon className="w-[35px] h-[35px]" /><span className="text-white text-2xl font-normal leading-normal">兑换后，音符+42</span>
+        <WholeNoteIcon className="w-[35px] h-[35px]" /><span className="text-white text-2xl font-normal leading-normal">兑换后，音符+{selectedProduct && selectedProduct?.product_num + selectedProduct?.free}</span>
       </div>
       <div className="flex flex-row gap-5 relative justify-center">
         {productList.map((product) => (
