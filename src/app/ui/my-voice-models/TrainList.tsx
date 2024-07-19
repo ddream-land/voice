@@ -128,6 +128,7 @@ function TrainList({
               page: 1,
               search: e.target.value,
             });
+            setCurrentPage(1)
             setSearch(e.target.value)}
           }
         />
@@ -150,16 +151,28 @@ function TrainList({
       ) : (
         <>
           {voiceTrainRecordsList.map((item) => (
-            <TrainItem key={item.id} value={item} isSelected={selectedIds.includes(item.task_id)} onValueChange={(checked) => {
-              if (checked) {
-                setSelectedIds([
-                  ...selectedIds,
-                  item.task_id,
-                ])
-              } else {
-                setSelectedIds(selectedIds.filter((id) => id !== item.task_id))
-              }
-            }} />
+            <TrainItem
+              key={item.id}
+              value={item}
+              isSelected={selectedIds.includes(item.task_id)}
+              onValueChange={(checked) => {
+                if (checked) {
+                  setSelectedIds([
+                    ...selectedIds,
+                    item.task_id,
+                  ])
+                } else {
+                  setSelectedIds(selectedIds.filter((id) => id !== item.task_id))
+                }
+              }}
+              onRetrain={() => {
+                getVoiceTrainRecordsServer({
+                  page: currentPageRef.current,
+                  search: searchRef.current,
+                  isRefresh: true,
+                })
+              }}
+            />
           ))}
         </>
       )}

@@ -212,6 +212,7 @@ export type voiceTrainRecordType = {
   task_name: string
   status: number
   result: number,
+  retrain: boolean,
   task_param: {
     model_id: string,
   }

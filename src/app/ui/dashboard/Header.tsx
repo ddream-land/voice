@@ -34,6 +34,7 @@ export default function Header() {
 
   const exchangeDispatch = useExchangeDispatch();
 
+  const [initRenderClient, setInitRenderClient] = useState(false)
   const [isGetFinanceBagsing, setIsGetFianceBagsing] = useState(false)
   const [exchangeBags, setExchangeBags] = useState<number>(0)
   const getFinanceBagsApi = getFinanceBags()
@@ -52,6 +53,7 @@ export default function Header() {
 
   useEffect(() => {
     getBagsApiServer();
+    setInitRenderClient(true)
   }, [])
 
   return (
@@ -63,11 +65,14 @@ export default function Header() {
               <div
                 className={`w-[320px] p-[5px] fixed top-0 left-0 bottom-0 pointer-events-none bg-transparent`}
               >
-                <DDLSidebar
-                  lang="en"
-                  title={{ name: 'Studio' }}
-                  minifyTimeout={0}
-                ></DDLSidebar>
+                {initRenderClient && (
+                  <DDLSidebar
+                    lang="en"
+                    title={{ name: 'Voice' }}
+                    minifyTimeout={0}
+                    forceSize={"mini"}
+                  ></DDLSidebar>
+                )}
               </div>
 
               {/* <div className="ml-[250px] text-slate-100 text-lg font-semibold leading-7 text-nowrap">

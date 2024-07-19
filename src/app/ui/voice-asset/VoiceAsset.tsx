@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import VoiceModelListHeader from "./VoiceModelListHeader";
-import VoiceModelList from "../components/voice-model-list/VoiceModelList";
 import { Button, cn, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import EmptyIcon from "@/app/icons/EmptyIcon";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
@@ -11,6 +10,8 @@ import { TypeVoiceModel } from "@/app/lib/definitions.voice";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 import VoiceModelDetailDrawerModal from "../components/voice-model-detail/VoiceModelDetailDrawerModal";
 import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
+const VoiceModelList = dynamic(() => import('../components/voice-model-list/VoiceModelList'), { ssr: false })
 
 function VoiceAsset() {
   const [isEmpty, setIsEmpty] = useState(false);

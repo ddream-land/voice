@@ -4,13 +4,14 @@ import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import VoiceModelListHeader from "./VoiceModelListHeader";
-import VoiceModelList from "../components/voice-model-list/VoiceModelList";
 import { InfType, TypeVoiceModel, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 import { cn } from "@nextui-org/react";
 import VoiceInfDrawerModal from "../components/voice-inf/VoiceInfDrawerModal";
 import { useSearchParams } from "next/navigation";
 import { getPublishSquare } from "@/app/lib/voice.api";
+import dynamic from "next/dynamic";
+const VoiceModelList = dynamic(() => import('../components/voice-model-list/VoiceModelList'), { ssr: false })
 
 
 function MainStation({

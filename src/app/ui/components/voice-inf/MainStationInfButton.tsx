@@ -71,6 +71,7 @@ function MainStationInfButton({
       {type === "code" && (
         <Button
           isDisabled={isDisabled}
+          variant="ghost"
           color="primary"
           size="lg"
           onPress={() => {
