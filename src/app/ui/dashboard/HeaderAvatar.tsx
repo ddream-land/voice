@@ -22,12 +22,19 @@ export default function HeaderAvatar() {
     <>
       <div onClick={() => {
         if (isLogin) {
-          gotoMePage()
+          // gotoMePage()
         } else {
           setIsOpen(true);
         }
       }} className="w-full h-full bg-zinc-800 rounded-full">
-        <Avatar src={user?.avatar} alt="avatar" className="h-full w-full" />
+        <Avatar
+          name={user?.name}
+          src={user?.avatar}
+          alt="avatar"
+          className="h-full w-full"
+          onClick={() => {
+          }}
+        />
       </div>
       <LoginModal
         isOpen={isOpen}

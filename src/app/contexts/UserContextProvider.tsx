@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useEffect } from "react";
-import { FC, ReactNode, useCallback, useMemo } from "react";
 import { TypeUser } from "@/app/lib/definitions.user";
 import { useReducer } from "react";
 import { useContext } from "react";

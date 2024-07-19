@@ -1,115 +1,175 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Select, SelectItem } from "@nextui-org/react";
 import {
-  Select,
-  SelectItem
-} from "@nextui-org/react";
-import {
-  DefaultInstantGenerateParamster,
-  TypeInstantGenerateParamster,
-} from "@/app/lib/definitions.InstantGenerateParamster";
-import VoiceParametersBasics from "../voice-parameters/VoiceParametersBasics";
-import VoiceParametersAdvanced from "../voice-parameters/VoiceParametersAdvanced";
-import ToneVoiceFile from "../ToneVoiceFile";
-import ExportIcon from "@/app/icons/ExportIcon";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
+  VoiceModelFormDataProps,
+  VoiceModelToneType,
+} from "@/app/lib/definitions.voice";
 import SelectVoiceModelModal from "./SelectVoiceModelModal";
-import UploadFile from "../UploadFile";
 import LabelForm from "../form/LabelForm";
 import TitleModal from "./TitleModal";
+import ToneVoiceFileList from "../voice-preview/ToneVoiceFileList";
+import { getModelList, getVoiceModelInfo } from "@/app/lib/voice.api";
+import { VoiceModelInfoType } from "@/app/lib/definitions.voice";
+import { languageListEn } from "@/app/lib/definitions.select";
+
+type myModelType = {
+  task_id: string
+  task_name: string
+  model_id: string
+  tones: Array<VoiceModelToneType>
+}
 
 function SelectVoiceModelForm({
+  formData,
+  modelId,
+  onChange
 }: {
+  formData: VoiceModelFormDataProps
+  modelId?: string | undefined,
+  onChange?: (newFormData: VoiceModelFormDataProps) => void,
 }) {
-  const [parameters, setParameters] = useState<TypeInstantGenerateParamster>(
-    DefaultInstantGenerateParamster
-  );
+  const [loading, setLoading] = useState(false);
+  const [myModelList, setMyModelList] = useState<Array<myModelType>>([])
 
-  const languageList = [
-    {
-      value: "GPT-Sovits",
-      label: "GPT-Sovits",
-    },
-    {
-      value: "zh",
-      label: "GPT-Sovits",
-    },
-    {
-      value: "ja",
-      label: "GPT-Sovits",
-    },
-  ];
+  const [selectToneList, setSelectToneList] = useState<Array<VoiceModelToneType>>([])
+  const [selectVoiceModelInfo, setSelectVoiceModelInfo] = useState<VoiceModelInfoType | null>(null)
+  const getModelListApi = getModelList();
 
-  const [type, setType] = useState<string>("GPT-Sovits");
+  const getModelListToServer = async () => {
+
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    const res = await getModelListApi.send({
+    });
+    if (res && res.code === 0) {
+      setMyModelList(res.data.list);
+      
+      if (modelId) {
+        getVoiceModelInfoServer(modelId);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const getVoiceModelInfoApi = getVoiceModelInfo();
+  const getVoiceModelInfoServer = async (modelId: string) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    const res = await getVoiceModelInfoApi.send({
+      model_id: modelId
+    });
+    if (res && res.code === 0) {
+      setSelectVoiceModelInfo(res.data);
+      setSelectToneList(res.data.slicer)
+    }
+
+    setLoading(false);
+  };
+
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
+  useEffect(() => {
+    getModelListToServer();
+  }, []);
+  
   return (
     <>
-      <div className="w-full px-8 py-16 flex-col justify-start items-end gap-12 inline-flex">
-        <div className="w-full flex-col justify-start items-start gap-12 flex">
-          <TitleModal title="Select Model" />
-          <div className="self-stretch flex-col justify-start items-start gap-8 flex">
-            <LabelForm label='Type' isRequired={true}>
-              <Select
-                variant="bordered"
-                size="md"
-                placeholder="Select an language"
-                labelPlacement="outside"
-                selectedKeys={[type]}
-                onChange={(e) => setType(e.target.value)}
-              >
-                {languageList.map((Language) => (
-                  <SelectItem
-                    key={Language.value}
-                    value={Language.value}
-                    classNames={{
-                      base: "h-12 pl-2 pr-3 py-2 rounded-xl gap-4",
-                    }}
-                  >
-                    {Language.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            </LabelForm>
-            
-            <LabelForm label='Basic Parameters{" "}' isRequired={true}>
-              <VoiceParametersBasics
-                value={parameters}
-                onChange={setParameters}
-              />
-            </LabelForm>
-            <LabelForm label='Advanced Parameters{" "}' isRequired={true}>
-              <VoiceParametersAdvanced
-                value={parameters}
-                onChange={setParameters}
-              />
-            </LabelForm>
-            <LabelForm label='Tone Audio Files（Sentimental Voices）{" "}' subTitle="You may add up to 21 different tones, and the first one will be set as default." isRequired={true}>
-              <div className="w-full flex flex-col gap-3">
-                <ToneVoiceFile voiceSrc={"voiceSrc"} hideTrash={false} />
-                <div className="w-full h-[136px] justify-start items-center gap-3 inline-flex">
-                  <UploadFile label="Select From Training Audio File"
-                    onClick={() => {
-                      setSelectModalOpen(true);
-                    }}
-                    icon={<PlusCircleIcon className="w-6 h-6 stroke-zinc-400" />}
-                  >
-                  </UploadFile>
-                  <div className="w-[136px] h-full">
-                    <UploadFile
-                      label="upload"
-                      onClick={() => {
-                        // setSelectModalOpen(true);
-                      }}
-                      icon={<ExportIcon className="w-6 h-6" />}
-                    >
-                    </UploadFile>
-                  </div>
-                </div>
-              </div>
-              
-            </LabelForm>
-          </div>
+      <div className="w-full flex-col justify-start items-start gap-12 flex">
+        <TitleModal title="Select Model" />
+        <div className="self-stretch flex-col justify-start items-start gap-8 flex">
+          <LabelForm label='Select' isRequired={true}>
+            <Select
+              isDisabled={!!modelId ? true : false}
+              disallowEmptySelection={true}
+              variant="bordered"
+              size="lg"
+              placeholder="Select model type"
+              labelPlacement="outside"
+              selectedKeys={[formData.model_id]}
+              defaultSelectedKeys={[modelId || '']}
+              onChange={(e) => {
+                const selectedModelId = e.target.value;
+                if (onChange) {
+                  onChange({
+                    ...formData,
+                    model_id: selectedModelId,
+                  });
+                }
+
+                getVoiceModelInfoServer(selectedModelId);
+
+                // setSelectToneList(myModelList.find((item) => item.model_id === selectedModelId)?.tones ?? [])
+              }}
+            >
+              {myModelList.map((mtItem) => (
+                <SelectItem
+                  key={mtItem.model_id}
+                  value={mtItem.model_id}
+                  classNames={{
+                    base: "h-12 pl-2 pr-3 py-2 rounded-xl gap-4",
+                  }}
+                >
+                  {mtItem.task_name}
+                </SelectItem>
+              ))}
+            </Select>
+          </LabelForm>
+          
+          <LabelForm label='Basic Parameters' isRequired={true}>
+            <Select
+              disallowEmptySelection={true}
+              variant="bordered"
+              size="lg"
+              label="Language"
+              placeholder="Select an language"
+              labelPlacement="outside"
+              selectedKeys={[formData.basic_params.language]}
+              classNames={{
+                label: "group[data-filled=true]:text-gray-500 group-data-[filled=true]:text-gray-500 text-gray-500 text-sm font-semibold leading-normal",
+              }}
+              onChange={(e) => {
+                onChange && onChange({
+                  ...formData,
+                  basic_params: {
+                    ...formData.basic_params,
+                    language: e.target.value,
+                  }
+                } as VoiceModelFormDataProps)
+              }}
+            >
+              {languageListEn.map((lang) => (
+                <SelectItem
+                  key={lang.value}
+                  value={lang.value}
+                  classNames={{
+                    base: 'h-12 pl-2 pr-3 py-2 rounded-xl gap-4',
+                  }}
+                >
+                  {lang.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </LabelForm>
+          <LabelForm label='Tone Audio Files（Sentimental Voices）' subTitle="You may add up to 21 different tones, and the first one will be set as default." isRequired={true}>
+            <ToneVoiceFileList
+              key={formData.model_id + "-" + selectToneList.length}
+              toneList={formData.tone}
+              modelId={formData.model_id}
+              selectToneList={selectToneList}
+              onChange={(newTone) => {
+                onChange && onChange({
+                  ...formData,
+                  tone: newTone
+                } as VoiceModelFormDataProps)
+              }}
+            />
+          </LabelForm>
         </div>
       </div>
 

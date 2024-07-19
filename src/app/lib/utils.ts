@@ -1,5 +1,7 @@
 "use client";
 
+import confetti from "canvas-confetti";
+import numbro from "numbro";
 import { useState } from "react";
 
 export const uuid = () => {
@@ -44,3 +46,41 @@ export const useCoverHandler = () => {
 
   return { isReplacingTheCoverLoding, handleReplacingTheCover };
 };
+
+export const getStarNumStr = (num: number) => {
+  return numbro(num).format({
+    average: true,
+    mantissa: 2,
+    optionalMantissa: true,
+    spaceSeparated: true
+  })
+}
+
+
+export const handleConfetti = () => {
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+};
+
+export const downloadFiles = (urls: string[]) => {
+
+  const download = (urls: string[]) => {
+    const url = urls.pop();
+
+    var a = document.createElement("a");
+    a.setAttribute('href', url as string);
+    a.setAttribute('download', '');
+    // a.setAttribute('target', '_blank');
+    a.click();
+
+    if (urls.length == 0) {
+      clearInterval(interval);
+    }
+  }
+  const interval = setInterval(download, 300, urls);
+}
+
+export const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))

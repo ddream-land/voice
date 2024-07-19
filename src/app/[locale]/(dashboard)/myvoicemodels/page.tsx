@@ -1,4 +1,5 @@
-import MyVoiceModels from "@/app/ui/myvoicemodels/MyVoiceModels";
+import { PlayBtnContextProvider } from "@/app/ui/components/voice-preview/PlayButtonContextProvider";
+import MyVoiceModels from "@/app/ui/my-voice-models/MyVoiceModels";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 
 export default function myVoiceModels() {
@@ -6,7 +7,9 @@ export default function myVoiceModels() {
   return (
     <>
       <NextIntlClientProvider messages={messages}>
-        <MyVoiceModels />
+        <PlayBtnContextProvider>
+          <MyVoiceModels />
+        </PlayBtnContextProvider>
       </NextIntlClientProvider>
     </>
   );

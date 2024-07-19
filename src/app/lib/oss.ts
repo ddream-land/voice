@@ -126,3 +126,20 @@ export async function uploadImage(file: File, ossToken: any): Promise<[string, s
   
   return [modelname, `${token.data.Endpoint}${newFilenameFullUrl}`]
 }
+
+export async function uploadFile(file: File, ossToken: any): Promise<[string, string]> {
+  const filename = file.name
+  const modelname = filename.split('.')[0]
+  const extName = filename.split('.')[1]
+
+  const [client, token] = await prepearOssClient(ossToken)
+
+  const newFilenameWithoutExt = generateId()
+  const newFilenameFullUrl = `/nuwa/images/${newFilenameWithoutExt}.${extName}`
+  const res = await client.put(newFilenameFullUrl, file)
+  if (res.res.status !== 200) {
+    throw new Error('Error.uploadfailed')
+  }
+  
+  return [modelname, `${token.data.Endpoint}${newFilenameFullUrl}`]
+}

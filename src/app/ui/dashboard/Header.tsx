@@ -1,15 +1,18 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, usePathname } from '@/navigation'
 import { useTranslations } from 'next-intl'
-import HeaderAvatar from './HeaderAvatar'
-import FlashIcon from '@/app/icons/FlashIcon'
+import WholeNoteIcon from '@/app/icons/WholeNoteIcon'
 import { DDLSidebar } from '@ddreamland/common'
 import { cn } from '@nextui-org/react'
 import VoiceAssetIcon from '@/app/icons/VoiceAssetIcon'
 import { BeakerIcon } from '@heroicons/react/24/solid'
 import DCubeIcon from '@/app/icons/3DCubeIcon'
 import Send2Icon from '@/app/icons/Send2Icon'
+import UserPanel from '../components/user-panel/UserPanel'
+import { useExchangeDispatch } from '../components/exchange-modal/ExchangeContextProvider'
+import { getFinanceBags } from '@/app/lib/finance.api'
+import ExchangeBags from './ExchangeBags'
 
 const navigation = [
   { name: 'Navigation.voiceasset', href: '/voiceasset', icon: VoiceAssetIcon, current: false },
@@ -27,51 +30,53 @@ export default function Header() {
       item.current = true
     }
   })
-  const [showSidebar, setShowSidebar] = useState(false)
-  const [sidebarIsFull, setSidebarIsFull] = useState(false)
+
+
+  const exchangeDispatch = useExchangeDispatch();
+
+  const [isGetFinanceBagsing, setIsGetFianceBagsing] = useState(false)
+  const [exchangeBags, setExchangeBags] = useState<number>(0)
+  const getFinanceBagsApi = getFinanceBags()
+  const getBagsApiServer = async () => {
+    if (isGetFinanceBagsing) return
+    setIsGetFianceBagsing(true)
+    const res = await getFinanceBagsApi.send({});
+    if (res && res.code === 0) {
+      if (res.data && res.data['101']) {
+        setExchangeBags(res.data['100'])
+      }
+    }
+
+    setIsGetFianceBagsing(false)
+  }
+
+  useEffect(() => {
+    getBagsApiServer();
+  }, [])
 
   return (
     <>
-      {showSidebar && (
-        <div className={`fixed left-6 top-0 pt-20 pb-14 w-[280px] z-50 h-screen`}>
-          <div className="w-full h-full">
-            <DDLSidebar lang="en" title={{ name: 'STUDIO' }} minifyTimeout={0}></DDLSidebar>
-          </div>
-        </div>
-      )}
       <div className="fixed top-0 left-0 z-[60] w-full h-[82px] px-6 bg-zinc-800 justify-between items-center inline-flex">
         <div className="self-stretch justify-start items-center gap-6 flex">
-          <div className="rounded-lg flex-col justify-center items-center gap-2 inline-flex">
+          <div className=" w-[200px] z-40 rounded-lg flex-col justify-center items-center gap-2 inline-flex">
             <div className="rounded-lg justify-start items-center gap-3 inline-flex">
-              {/* <div
-                onClick={() => setShowSidebar(!showSidebar)}
-                className="px-4 py-2 bg-zinc-900 rounded-3xl justify-start items-center gap-3 flex"
-              >
-                <LogoIcon className="" />
-                <HeaderArrowIcon className="" />
-              </div> */}
-
               <div
                 className={`w-[320px] p-[5px] fixed top-0 left-0 bottom-0 pointer-events-none bg-transparent`}
               >
-                {/* padding-top/padding-left = (header height(h-[82px]) - DDLSidebar height(72px)) / 2 */}
                 <DDLSidebar
                   lang="en"
                   title={{ name: 'Studio' }}
                   minifyTimeout={0}
-                  onPanelSizeChange={(toFull) => {
-                    setSidebarIsFull(toFull)
-                  }}
                 ></DDLSidebar>
               </div>
 
-              <div className="ml-[250px] text-slate-100 text-lg font-semibold font-['Inter'] leading-7 text-nowrap">
+              {/* <div className="ml-[250px] text-slate-100 text-lg font-semibold leading-7 text-nowrap">
                 Voice Studio
-              </div>
+              </div> */}
             </div>
           </div>
 
-          <div className="w-[2px] h-[27px] bg-white/10"></div>
+          {/* <div className="w-[2px] h-[27px] bg-white/10"></div> */}
 
           <div className="justify-start items-center gap-1 flex">
             {navigation.map((item, index) => (
@@ -86,15 +91,15 @@ export default function Header() {
                   <item.icon
                     className={cn(
                       item.current
-                        ? 'fill-white stroke-white'
-                        : 'group-hover/item:fill-white group-hover/item:stroke-white fill-zinc-400 stroke-zinc-400',
+                        ? 'fill-[#CEFF1C] stroke-[#CEFF1C]'
+                        : 'group-hover/item:fill-[#CEFF1C] group-hover/item:stroke-[#CEFF1C] fill-zinc-400 stroke-zinc-400',
                       ' w-6 h-6 relative'
                     )}
                   />
                   <div
                     className={cn(
-                      item.current ? 'text-white' : 'group-hover/item:text-white text-zinc-400',
-                      " text-sm font-medium font-['Inter'] leading-tight"
+                      item.current ? 'text-[#CEFF1C]' : 'group-hover/item:text-[#CEFF1C] text-zinc-400',
+                      " text-sm font-medium leading-tight"
                     )}
                   >
                     {t(item.name)}
@@ -105,15 +110,11 @@ export default function Header() {
           </div>
         </div>
         <div className="h-9 justify-end items-center gap-3 flex">
-          <div className="rounded-lg justify-center items-center gap-0.5 flex">
-            <FlashIcon className="w-4 h-4 fill-green-500 stroke-green-500 relative" />
-            <div className="text-center text-green-500 text-xs font-bold font-['Inter'] leading-normal">
-              255
-            </div>
-          </div>
+          <ExchangeBags />
           <div className="w-9 h-9 relative">
             <div className="w-9 h-9 left-0 top-0 absolute rounded-[40px] justify-center items-center inline-flex">
-              <HeaderAvatar />
+              {/* <HeaderAvatar /> */}
+              <UserPanel />
             </div>
             <div className="w-3 h-3 left-[26px] top-[-2px] absolute bg-orange-400 rounded-full border-2 border-zinc-800" />
           </div>

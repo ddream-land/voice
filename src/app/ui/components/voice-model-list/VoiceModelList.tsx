@@ -5,89 +5,118 @@ import { TypeVoiceModel } from "@/app/lib/definitions.voice";
 import VoiceModelItemSkeleton from "./VoiceModelItemSkeleton";
 import { ScrollShadow } from "@nextui-org/react";
 import InfiniteScroll from "../infinite-scroll/InfiniteScroll";
+import { getMyPublish, getPublishSquare } from "@/app/lib/voice.api";
+import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 
-const limit = 10;
 
 function VoiceModelList({
+  filters,
+  selectedVoiceModel,
+  type = 'all',
   onItemClick,
+  onChange,
 }: {
-  onItemClick?: (voiceModel: TypeVoiceModel) => void;
+  filters?: VoiceModelFilterType
+  selectedVoiceModel?: TypeVoiceModel | null;
+  type?: 'workstation' | 'my' | 'all';
+  onItemClick?: (voiceModel: TypeVoiceModel | null) => void;
+  onChange?: (voiceModelList: TypeVoiceModel[]) => void;
 }) {
-
-  const [selectedVoiceModel, setSelectedVoiceModel] = useState<TypeVoiceModel | null >(null);
+  let getVoiceModelListApi: any;
+  if (type === 'my') {
+    getVoiceModelListApi = getMyPublish();
+  } else {
+    getVoiceModelListApi = getPublishSquare();
+  }
 
   const initVoiceModelList:Array<TypeVoiceModel> = []
-
   const [count, setCount] = useState(0);
-
   const [loading, setLoading] = useState(false);
-  const [voiceList, setVoiceModelList] = useState<TypeVoiceModel[]>(initVoiceModelList);
+  const [hasMore, setHasMore] = useState(true);
+  const [nextPageToken, setNextPageToken] = useState("");
+  const [voiceModelList, setVoiceModelList] = useState<TypeVoiceModel[]>(initVoiceModelList);
   
-  const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
+  const [prevFilters, setPrevFilters] = useState(filters);
 
-  const loadMoreData = async () => {
+
+  const sWidth = window.innerWidth;
+  let rowCount = 2
+  if (sWidth > 1024) {
+    rowCount = 4
+  }
+  if (sWidth > 1536) {
+    rowCount = 6
+  }
+
+  const getPublishSquareToServer = async ({isFirst = false}) => {
     if (loading) {
       return;
     }
     setLoading(true);
 
-    // fetch('https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo')
-    //   .then((res) => res.json())
-    //   .then((body) => {
-    //     setData([...data, ...body.results]);
-    //     setLoading(false);
-    //   })
-    //   .catch(() => {
-    //     setLoading(false);
-    //   });
-
-    await sleep(1000);
-    let newVoiceModelList: TypeVoiceModel[] =[];
-    for (let i = 1; i < limit+1; i++) {
-      newVoiceModelList.push({
-        id: i + count,
-        src: 'https://via.placeholder.com/160x90',
-        name: `大叔成熟男声音${i + count}`,
-        count: 3500000,
-        star: i%2 === 1,
-      })
+    const res = await getVoiceModelListApi.send({
+      page_token: isFirst ? '' : nextPageToken,
+      size: isFirst ? rowCount * 6 : rowCount * 2,
+      type: filters?.type || '',
+      name: filters?.name || ''
+    });
+    if (res && res.code === 0) {
+      onChange && onChange(res.data.list);
+      
+      let newVoiceModelList: TypeVoiceModel[] = res.data.list;
+      if (isFirst) {
+        setCount(newVoiceModelList.length);
+        setVoiceModelList([...newVoiceModelList]);
+      } else {
+        setCount(count + newVoiceModelList.length);
+        setVoiceModelList([...voiceModelList, ...newVoiceModelList]);
+      }
+      setLoading(false);
+      setHasMore(res.data.has_more)
+      setNextPageToken(res.data.next_page_token)
     }
-    setCount(count + limit);
-    setVoiceModelList([...voiceList, ...newVoiceModelList]);
+
     setLoading(false);
   };
 
+  if (filters) {
+    if (prevFilters?.type !== filters.type || prevFilters.name !== filters.name) {
+      setPrevFilters(filters);
+      getPublishSquareToServer({isFirst: true});
+    }
+  }
+
   useEffect(() => {
-    loadMoreData();
+    getPublishSquareToServer({isFirst: true});
   }, []);
+
 
   return (
     <div className="self-stretch flex-col justify-start items-start gap-8 flex h-full">
-      <ScrollShadow size={32} visibility="top" hideScrollBar id="scrollableVoiceModelDiv" className="w-full flex-col justify-start items-start gap-8 inline-flex h-dvh overflow-auto py-8 px-8">
+      <ScrollShadow size={16} hideScrollBar id="scrollableVoiceModelDiv" className="w-full flex-col justify-start items-start gap-8 inline-flex h-dvh overflow-auto py-4 px-8">
         <InfiniteScroll
-          dataLength={voiceList.length}
-          next={loadMoreData}
-          hasMore={voiceList.length < 50}
-          loader={<><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /><VoiceModelItemSkeleton /></>}
+          dataLength={voiceModelList.length}
+          next={() => {getPublishSquareToServer({isFirst: false})}}
+          hasMore={hasMore}
+          loader={<>
+            {Array.from({ length: rowCount * 2 }, (_, i) => i).map((item, index) => (<VoiceModelItemSkeleton key={index} />))}
+          </>}
           scrollableTarget="scrollableVoiceModelDiv"
-          className="w-full self-stretch items-start grid gap-8 grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+          className="w-full self-stretch items-start grid gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6"
         >
-          {voiceList.map((voice) => (
-            <div key={voice.id} onClick={() => {
-              // onItemClick && onItemClick(voice);
-              if(selectedVoiceModel && (voice.id === selectedVoiceModel.id)) {
-                setSelectedVoiceModel(null);
-                return;
-              };
-              setSelectedVoiceModel(voice);
-            }}>
-              <VoiceModelItem onItemClick={onItemClick} voice={voice} key={voice.id} isSelected={(selectedVoiceModel !== null) && (voice.id === selectedVoiceModel.id)} />
+          {voiceModelList.map((voice) => (
+            <div key={voice.id}>
+              <VoiceModelItem
+                onItemClick={onItemClick}
+                voice={voice}
+                key={voice.id}
+                type={type}
+                isSelected={!!selectedVoiceModel && selectedVoiceModel.id === voice.id}
+              />
             </div>
           ))}
         </InfiniteScroll>
       </ScrollShadow>
-
-      <div className="h-14" />
     </div>
   );
 }

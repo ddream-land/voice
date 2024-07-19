@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAmDispatch } from "../components/AlterMessageContextProvider";
+import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { Input, Slider, Tooltip } from "@nextui-org/react";
 
 function NuwaSliderInput({
@@ -50,7 +50,7 @@ function NuwaSliderInput({
         // base: "max-w-md",
         // trackWrapper: "h-12",
         // thumb: ["after:w-2 after:h-2 after:bg-primary", "w-3 h-3 bg-white"],
-        label: "text-gray-500 text-sm font-semibold font-['Inter'] leading-normal",
+        label: "text-gray-500 text-sm font-semibold leading-normal",
         // labelWrapper: 'mb-px'
       }}
       // we extract the default children to render the input

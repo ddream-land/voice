@@ -1,9 +1,11 @@
 'use client'
 import { useState } from "react";
-import { useAmDispatch } from "@/app/ui/components/AlterMessageContextProvider";
+import { useAmDispatch } from "@/app/ui/components/alter-message/AlterMessageContextProvider";
 import { useLocale, useTranslations } from "next-intl";
 import { getCookie, removeCookie } from 'typescript-cookie'
 import { usePathname, useRouter } from "@/navigation";
+import { useLoginDispatch } from "@ddreamland/common";
+import axios from "axios";
 
 export const NUWAUID = "nuwa_uid"
 export const NUWASESSION = "nuwa_session"
@@ -30,18 +32,25 @@ export const baseApiHander = ({
   mustLogin = false,
   noLoginGotoLogin = false,
   isSt = false,
-  successMsg
+  successMsg,
+  isBody = false,
+  isUpload = false,
+  onUploadProgress,
 }: {
-  url: string,
-  mustLogin?: boolean,
-  noLoginGotoLogin?: boolean,
-  isSt?: boolean,
+  url: string
+  mustLogin?: boolean
+  noLoginGotoLogin?: boolean
+  isSt?: boolean
   successMsg?: string
+  isBody?: boolean
+  isUpload?: boolean
+  onUploadProgress?: (progressEvent: any) => void
 }) => {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const loginDispatch = useLoginDispatch();
   const [loading, setLoading] = useState(false);
 
   const amDispatch = useAmDispatch();
@@ -54,7 +63,16 @@ export const baseApiHander = ({
       const uid = getCookie(NUWAUID)
       const session = getCookie(NUWASESSION)
       if (!uid || !session) {
-        // router.push('/login');
+        loginDispatch({
+          type: "open",
+          payload: {
+            isCloseable: false,
+            onLogin: () => {
+              loginDispatch({type: "close"});
+              window.location.reload();
+            }
+          },
+        })
         return;
       }
       fetchUrl = `${apiUrl}${url}?${new URLSearchParams({
@@ -64,30 +82,35 @@ export const baseApiHander = ({
     }
     
     try {
-      let body = null;
-      if (params) {
-        body = JSON.stringify(params);
+      let fetchParams = {
+        method: 'POST',
+        data: isBody ? params : JSON.stringify(params),
+        headers: {
+          'Accept-Language': locale
+        } as any,
+        onUploadProgress: (progressEvent: any) => {
+          onUploadProgress && onUploadProgress(progressEvent)
+        },
+      }
+
+      if (!isUpload) {
+        fetchParams.headers['Content-Type'] = 'application/json'
       }
       
-      const response = await fetch(fetchUrl, {
-          method: 'POST',
-          body: body,
-          headers: {
-            'Accept-Language': locale,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      if(response.ok){
-        const data = await response.json();
+      const response = await axios(fetchUrl, fetchParams);
+      
+      if(response.status === 200){
+        const data = response.data;
         // if (isSt) {
         //   return data;
         // }
         if (data.code === 0) {
           successMsg && amDispatch({
             type: "add",
-            payload: successMsg,
+            payload: {
+              message: successMsg,
+              type: "success"
+            },
           })
           setLoading(false)
           return data;
@@ -96,7 +119,16 @@ export const baseApiHander = ({
         // session 过期
         if (data.code === 604) {
           if(noLoginGotoLogin) {
-            // router.push('/login');
+            loginDispatch({
+              type: "open",
+              payload: {
+                isCloseable: false,
+                onLogin: () => {
+                  loginDispatch({type: "close"});
+                  window.location.reload();
+                }
+              },
+            })
           }
           setLoading(false)
           return data;
@@ -104,7 +136,9 @@ export const baseApiHander = ({
 
         amDispatch({
           type: "add",
-          payload: data.msg,
+          payload: {
+            message: data.msg
+          },
         })
   
         setLoading(false)
@@ -114,7 +148,9 @@ export const baseApiHander = ({
     } catch (e) {
       amDispatch({
         type: "add",
-        payload: t("User.sysfail"),
+        payload: {
+          message: t("Error.sysfail")
+        },
       })
       setLoading(false)
     }    

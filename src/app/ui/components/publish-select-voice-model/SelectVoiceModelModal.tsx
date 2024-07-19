@@ -9,7 +9,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import ToneVoiceFile from "../ToneVoiceFile";
+import ToneVoiceFile from "../voice-preview/ToneVoiceFile";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 function SelectVoiceModelModal({
@@ -40,7 +40,7 @@ function SelectVoiceModelModal({
         {(onClose) => (
           <>
             <ModalHeader>
-              <div className="text-white text-2xl font-bold font-['Inter'] leading-loose">Select Model</div>
+              <div className="text-white text-2xl font-bold leading-loose">Select Model</div>
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-col gap-4">

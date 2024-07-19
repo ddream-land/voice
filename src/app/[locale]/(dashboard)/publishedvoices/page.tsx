@@ -1,5 +1,6 @@
 
-import WorkStation from "@/app/ui/work-station/WorkStation";
+import { PlayBtnContextProvider } from "@/app/ui/components/voice-preview/PlayButtonContextProvider";
+import PublishedVoices from "@/app/ui/published-voices/PublishedVoices";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 
 export default function publishedVoices() {
@@ -7,7 +8,9 @@ export default function publishedVoices() {
   return (
     <>
       <NextIntlClientProvider messages={messages}>
-        <WorkStation />
+        <PlayBtnContextProvider>
+          <PublishedVoices />
+        </PlayBtnContextProvider>
       </NextIntlClientProvider>
     </>
   );

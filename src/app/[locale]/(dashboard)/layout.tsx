@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { NextIntlClientProvider,useMessages } from "next-intl";
-import { AlterMessageContextProvider } from "@/app/ui/components/AlterMessageContextProvider";
+import { AlterMessageContextProvider } from "@/app/ui/components/alter-message/AlterMessageContextProvider";
 import DashboardLayout from "@/app/ui/dashboard/DashboardLayout";
+import { LoginContextProvider } from "@ddreamland/common";
+import { ExchangeContextProvider } from "@/app/ui/components/exchange-modal/ExchangeContextProvider";
 
 const locales = ["en"];
 
@@ -33,11 +35,15 @@ export default function RootLayout({
     <>
       <NextIntlClientProvider messages={messages}>
         <AlterMessageContextProvider>
-          <DashboardLayout>
-            <div className=" min-h-[80vh]">
-              {children}
-            </div>
-          </DashboardLayout>
+          <LoginContextProvider>
+            <ExchangeContextProvider>
+              <DashboardLayout>
+                <div className=" min-h-[80vh]">
+                  {children}
+                </div>
+              </DashboardLayout>
+            </ExchangeContextProvider>
+          </LoginContextProvider>
         </AlterMessageContextProvider>
       </NextIntlClientProvider>
     </>

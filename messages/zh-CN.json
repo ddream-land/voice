@@ -102,6 +102,7 @@
     "localstoragefull": "本地存储空间已满，请删除后在操作",
     "draftscharacterlimit": "限制3个",
     "uploadfailed": "上传失败",
-    "invalidfile": "无效文件"
+    "invalidfile": "无效文件",
+    "sysfail": "系统错误"
   }
 }

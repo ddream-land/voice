@@ -93,6 +93,7 @@
     "localstoragefull": "The local storage space is full. Please delete it and perform operations again",
     "draftscharacterlimit": "Limit 3",
     "uploadfailed": "Upload failed.",
-    "invalidfile": "Invalid file."
+    "invalidfile": "Invalid file.",
+    "sysfail": "System error, please try again later."
   }
 }

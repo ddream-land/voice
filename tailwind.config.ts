@@ -122,6 +122,7 @@ const config: Config = {
           colors: {
             background:"#13161A",
             // primary: { DEFAULT: "#6366f1"},
+            primary: { DEFAULT: "#18A9CC"},
             success: {
               800: "#b5f8db",
               900: "#ddfff2"
