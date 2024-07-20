@@ -135,9 +135,8 @@ export default function UserPanel({ className }: UserPanelProps) {
       <Popover
         isOpen={dropdownIsOpen}
         placement="bottom-end"
-        className="bg-[#25252A]"
         classNames={{
-          base: "p-0 w-[300px]", // change arrow background
+          base: "p-0 w-[300px] ", // change arrow background
           content: "p-4 bg-zinc-800 rounded-2xl shadow",
         }}
   

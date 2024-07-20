@@ -58,7 +58,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 z-[60] w-full h-[82px] px-6 bg-zinc-800 justify-between items-center inline-flex">
+      <div className="fixed top-0 left-0 z-[49] w-full h-[82px] px-6 bg-zinc-800 justify-between items-center inline-flex">
         <div className="self-stretch justify-start items-center gap-6 flex">
           <div className=" w-[200px] z-40 rounded-lg flex-col justify-center items-center gap-2 inline-flex">
             <div className="rounded-lg justify-start items-center gap-3 inline-flex">
