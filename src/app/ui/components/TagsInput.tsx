@@ -6,9 +6,11 @@ import { cn, Input } from "@nextui-org/react";
 function TagsInput({
   value,
   onValueChange,
+  placeholder = "",
 }: {
   value: string[];
   onValueChange?: (value: string[]) => void;
+  placeholder?: string,
 }) {
   const [tags, setTags] = useState(value);
 
@@ -51,7 +53,7 @@ function TagsInput({
           type="text"
           size="sm"
           variant="flat"
-          placeholder="Please enter something"
+          placeholder={placeholder}
           value={newTag}
           onValueChange={setNewTag}
           onKeyDown={(e) => {

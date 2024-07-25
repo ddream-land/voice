@@ -7,6 +7,7 @@ import ExportIcon from "@/app/icons/ExportIcon";
 import UploadVoiceModelFile from "../upload-file/UploadVoiceModelFile";
 import SelectToneListModal from "./SelectToneListModal";
 import { cn } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 
 function ToneVoiceFileList({
   toneList,
@@ -19,6 +20,7 @@ function ToneVoiceFileList({
   selectToneList?: Array<VoiceModelToneType>
   onChange: (newToneList: Array<VoiceModelToneType>) => void
 }) {
+  const t = useTranslations();
   const [uploadKey, setUploadKey] = useState(0)
 
   return (
@@ -71,7 +73,7 @@ function ToneVoiceFileList({
         <div className={cn(selectToneList ? "w-32" : "w-full", "h-32")}>
           <UploadVoiceModelFile
             key={uploadKey}
-            label={<div>Drag and drop files here or click to upload<br />tone audio files.</div>}
+            label={<div>{t("PublishVoiceModel.uploadVoiceModelFileLabel")}</div>}
             icon={<ExportIcon className="w-6 h-6" />}
             modelId={modelId}
             type="audio"

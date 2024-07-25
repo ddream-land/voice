@@ -18,6 +18,7 @@ import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
 import { useRouter } from "@/navigation";
 import { useAmDispatch } from '../alter-message/AlterMessageContextProvider'
 import { getBags } from '@/app/lib/user.api'
+import { useLocale, useTranslations } from 'next-intl'
 
 
 type UserPanelProps = {
@@ -25,10 +26,8 @@ type UserPanelProps = {
 }
 
 export default function UserPanel({ className }: UserPanelProps) {
-  const { t: tCommon } = useTranslation('common')
-
-  const { i18n } = useTranslation();
-  const amDispatch = useAmDispatch();
+  const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const {
     isOpen: payIsOpen,
@@ -194,7 +193,7 @@ export default function UserPanel({ className }: UserPanelProps) {
                   </div>
                 </div>
                 <div className="h-full flex flex-row shrink-0 grow-0 cursor-pointer">
-                  <div className="text-zinc-400 text-xs font-normal leading-none">Profile</div>
+                  <div className="text-zinc-400 text-xs font-normal leading-none">{t("UserPanel.profile")}</div>
                   <ChevronRightIcon className="w-3 h-3 fill-zinc-400" />
                 </div>
               </div>
@@ -208,7 +207,7 @@ export default function UserPanel({ className }: UserPanelProps) {
               <div
                 className={`w-full h-[98px] rounded-xl border border-white px-4 py-3 flex flex-col justify-between bg-[url('/imgs/wallet-bg.png')] bg-cover`}
               >
-                <div className="text-white text-sm font-medium leading-tight">Balance</div>
+                <div className="text-white text-sm font-medium leading-tight">{t("UserPanel.balance")}</div>
                 <div className={`flex flex-row justify-between items-end`}>
                   <div className='flex flex-col justify-center items-start'>
                     <div className="text-white text-2xl font-bold leading-loose">
@@ -216,7 +215,7 @@ export default function UserPanel({ className }: UserPanelProps) {
                         thousandSeparated: true,
                       })}
                     </div>
-                    <div className="opacity-75 text-white text-xs font-normal leading-none">Dream Token</div>
+                    <div className="opacity-75 text-white text-xs font-normal leading-none">{t("UserPanel.dreamToken")}</div>
                   </div>
                   <Button
                     onClick={onTopUpClicked}
@@ -224,7 +223,7 @@ export default function UserPanel({ className }: UserPanelProps) {
                     size='sm'
                     className={`bg-white/10 w-[66px] rounded-full`}
                   >
-                    Top up
+                    {t("UserPanel.topUp")}
                   </Button>
                 </div>
               </div>
@@ -236,7 +235,7 @@ export default function UserPanel({ className }: UserPanelProps) {
               startContent={<ArrowRightStartOnRectangleIcon className='w-5 h-5' />}
               onClick={onLogoutClicked}
             >
-              Log Out
+              {t("UserPanel.logout")}
             </ListboxItem>
           </Listbox>  
         </PopoverContent>
@@ -246,7 +245,7 @@ export default function UserPanel({ className }: UserPanelProps) {
         isOpen={payIsOpen}
         onOpenChange={onPayOpenChange}
         onPaymentComplete={onPaymentComplete}
-        lang={'en'}
+        lang={locale as any}
       />
 
       <div className={`w-[16px] h-[16px] absolute bottom-0 -right-1`}></div>

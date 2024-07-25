@@ -32,7 +32,7 @@ export function usePlayBtnDispatch() {
 function playBtnReducer(draft: Array<any>, action: any) {
   switch (action.type) {
     case 'pause': {
-      if (draft.length !== 0) {
+      if (draft.length !== 0 && draft[0] !== action.payload.audio) {
         draft[0].pause && draft[0].pause();
       }
       draft[0] = action.payload.audio;

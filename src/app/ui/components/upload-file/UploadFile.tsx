@@ -67,7 +67,7 @@ function UploadFile({
 
   const uploadFileApi = uploadFileToServer((progressEvent: any) => {
     setLoaded(progressEvent.loaded);
-    setTotal(progressEvent.total);
+    setTotal(progressEvent.total + 1);
   });
 
   const onDropHander = async (acceptedFiles: any) => {
@@ -187,7 +187,7 @@ function UploadFile({
           )}
 
           <div className="w-full absolute bottom-0 left-0">
-            {loaded !== total && (
+            {loaded !== total && isUploading && (
               <Progress size="sm" aria-label="Loading..." value={loaded} maxValue={total} />
             )}
           </div>

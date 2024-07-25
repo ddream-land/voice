@@ -3,12 +3,15 @@ import { useState } from "react";
 import { useAmDispatch } from "@/app/ui/components/alter-message/AlterMessageContextProvider";
 import { useLocale, useTranslations } from "next-intl";
 import { getCookie, removeCookie } from 'typescript-cookie'
-import { usePathname, useRouter } from "@/navigation";
 import { useLoginDispatch } from "@ddreamland/common";
 import axios from "axios";
+import { useExchangeDispatch } from "../ui/components/exchange-modal/ExchangeContextProvider";
+import { getFinanceBags } from "./finance.api";
 
 export const NUWAUID = "nuwa_uid"
 export const NUWASESSION = "nuwa_session"
+export const I18N_LOCALE = "i18next";
+export const NEXT_LOCALE = "NEXT_LOCALE";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const stBaseUrl = process.env.NEXT_PUBLIC_ST_API_URL;
@@ -26,6 +29,21 @@ export const deleteLoginCookie = () => {
   removeCookie(NUWAUID)
   removeCookie(NUWASESSION)
 }
+
+export const getI18n = () => {
+  if (typeof document !== "undefined") {
+    const i18nLocale = getCookie(I18N_LOCALE);
+    const nextLocale = getCookie(NEXT_LOCALE);
+    if (i18nLocale) {
+      return i18nLocale;
+    }
+    if (nextLocale) {
+      return nextLocale
+    }
+  }
+  return 'zh-CN';
+};
+
 
 export const baseApiHander = ({
   url,
@@ -48,12 +66,120 @@ export const baseApiHander = ({
 }) => {
   const t = useTranslations();
   const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
   const loginDispatch = useLoginDispatch();
+  const exchangeDispatch = useExchangeDispatch();
   const [loading, setLoading] = useState(false);
-
   const amDispatch = useAmDispatch();
+  const axiosInstance = axios.create();
+
+  axiosInstance.interceptors.response.use(function (response) {
+    const data = response.data;
+    if (data.code === 0) {
+      successMsg && amDispatch({
+        type: "add",
+        payload: {
+          message: successMsg,
+          type: "success"
+        },
+      })
+      setLoading(false)
+    }
+    
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+
+  axiosInstance.interceptors.response.use(function (response) {
+    const data = response.data;
+
+    // session 过期
+    if (data.code === 604) {
+      if(noLoginGotoLogin) {
+        loginDispatch({
+          type: "open",
+          payload: {
+            isCloseable: false,
+            locale: getI18n(),
+            onLogin: () => {
+              loginDispatch({type: "close"});
+              window.location.reload();
+            }
+          },
+        })
+      }
+      setLoading(false)
+    }
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+
+  axiosInstance.interceptors.response.use(function (response) {
+    const getBagsApiServer = async () => {
+      const getFinanceBagsApi = getFinanceBags()
+      const res = await getFinanceBagsApi.send({});
+      if (res && res.code === 0) {
+        if (res.data && res.data['101']) {
+          exchangeDispatch({
+            type: 'set',
+            payload: res.data['101'] || 0
+          })
+        }
+      }
+    }
+    const data = response.data;
+
+    // 虚拟货币不足
+    if (data.code === 7003) {
+      amDispatch({
+        type: "add",
+        payload: {
+          message: data.msg
+        },
+      })
+      exchangeDispatch({
+        type: 'open',
+        payload: {
+          onClose: () => {
+            getBagsApiServer();
+            exchangeDispatch({type: "close"});
+          },
+          onSuccess: () => {
+            getBagsApiServer();
+          }
+        },
+      })
+
+      setLoading(false)
+    }
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+
+  axiosInstance.interceptors.response.use(function (response) {
+    const data = response.data;
+
+    if (![0, 604, 7003].includes(data.code)) {
+      amDispatch({
+        type: "add",
+        payload: {
+          message: data.msg
+        },
+      })
+
+      setLoading(false)
+    }
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+
   const send = async (params?: any) => {
     const apiUrl = isSt ? stBaseUrl : baseUrl;
     const isLogin = getIsLogin();
@@ -67,6 +193,7 @@ export const baseApiHander = ({
           type: "open",
           payload: {
             isCloseable: false,
+            locale: getI18n(),
             onLogin: () => {
               loginDispatch({type: "close"});
               window.location.reload();
@@ -97,54 +224,10 @@ export const baseApiHander = ({
         fetchParams.headers['Content-Type'] = 'application/json'
       }
       
-      const response = await axios(fetchUrl, fetchParams);
+      const response = await axiosInstance(fetchUrl, fetchParams);
       
-      if(response.status === 200){
-        const data = response.data;
-        // if (isSt) {
-        //   return data;
-        // }
-        if (data.code === 0) {
-          successMsg && amDispatch({
-            type: "add",
-            payload: {
-              message: successMsg,
-              type: "success"
-            },
-          })
-          setLoading(false)
-          return data;
-        }
-
-        // session 过期
-        if (data.code === 604) {
-          if(noLoginGotoLogin) {
-            loginDispatch({
-              type: "open",
-              payload: {
-                isCloseable: false,
-                onLogin: () => {
-                  loginDispatch({type: "close"});
-                  window.location.reload();
-                }
-              },
-            })
-          }
-          setLoading(false)
-          return data;
-        }
-
-        amDispatch({
-          type: "add",
-          payload: {
-            message: data.msg
-          },
-        })
-  
-        setLoading(false)
-        return data;
-      }
       setLoading(false)
+      return response.data;
     } catch (e) {
       amDispatch({
         type: "add",

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { VoiceModelBasicParamsType } from "@/app/lib/definitions.voice";
 import { Select, SelectItem } from "@nextui-org/react";
 import NuwaSliderInput from "../NuwaSliderInput";
-import { languageListEn, segmentationMethodListEn } from "@/app/lib/definitions.select";
+import { languageListEn, languageListZhCN, segmentationMethodListEn, segmentationMethodListZhCN } from "@/app/lib/definitions.select";
 
 
 function VoiceParametersBasics({
@@ -15,15 +15,18 @@ function VoiceParametersBasics({
   onChange: (value:VoiceModelBasicParamsType)=>void,
 }) {
   const t = useTranslations();
+  const locale = useLocale();
+  const languageList = locale === "en" ? languageListEn : languageListZhCN;
+  const segmentationMethodList = locale === "en" ? segmentationMethodListEn : segmentationMethodListZhCN;
 
   return (
-    <div className="self-stretch rounded-xl justify-end items-center gap-x-12 gap-y-7 grid grid-cols-1 lg:grid-cols-2">
+    <div className="self-stretch rounded-xl justify-end items-center gap-x-12 gap-y-7 grid grid-cols-2 lg:grid-cols-2">
       <Select
         disallowEmptySelection={true}
         variant="bordered"
         size="lg"
-        label="Language"
-        placeholder="Select an language"
+        label={t("VoiceInf.languageLabel")}
+        placeholder={t("VoiceInf.languagePlaceholder")}
         labelPlacement="outside"
         selectedKeys={[value.language as string]}
         classNames={{
@@ -31,7 +34,7 @@ function VoiceParametersBasics({
         }}
         onChange={(e) => onChange({ ...value, language: e.target.value })}
       >
-        {languageListEn.map((Language) => (
+        {languageList.map((Language) => (
             <SelectItem
               key={Language.value}
               value={Language.value}
@@ -44,7 +47,7 @@ function VoiceParametersBasics({
         ))}
       </Select>
       <NuwaSliderInput
-        label="Speed"
+        label={t("VoiceInf.speedLabel")}
         step={0.01} 
         maxValue={2} 
         minValue={0.5} 
@@ -55,8 +58,8 @@ function VoiceParametersBasics({
         disallowEmptySelection={true}
         variant="bordered"
         size="lg"
-        label="Segmentation Method"
-        placeholder="Select an segmentation method"
+        label={t("VoiceInf.segmentationMethodLabel")}
+        placeholder={t("VoiceInf.segmentationMethodPlaceholder")}
         labelPlacement="outside"
         selectedKeys={[value.seg_method as string]}
         onChange={(e) => onChange({ ...value, seg_method: e.target.value })}
@@ -64,7 +67,7 @@ function VoiceParametersBasics({
           label: "group[data-filled=true]:text-gray-500 group-data-[filled=true]:text-gray-500 text-gray-500 text-sm font-semibold leading-normal",
         }}
       >
-        {segmentationMethodListEn.map((smItem) => (
+        {segmentationMethodList.map((smItem) => (
             <SelectItem
               key={smItem.value}
               value={smItem.value}
@@ -77,7 +80,7 @@ function VoiceParametersBasics({
         ))}
       </Select>
       <NuwaSliderInput
-        label="Max words allowed per sentence"
+        label={t("VoiceInf.nwapsLabel")}
         step={1} 
         maxValue={1000} 
         minValue={5}

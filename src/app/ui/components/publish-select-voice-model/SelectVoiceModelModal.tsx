@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import ToneVoiceFile from "../voice-preview/ToneVoiceFile";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
 
 function SelectVoiceModelModal({
   isOpen = false,
@@ -19,6 +20,7 @@ function SelectVoiceModelModal({
   isOpen: boolean;
   onChange: (isOpen: boolean) => void; // 类型定义为函数，用于处理模态框的打开和关闭
 }) {
+  const t = useTranslations();
 
   const selectModal = useDisclosure({
     isOpen,
@@ -50,7 +52,7 @@ function SelectVoiceModelModal({
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button size="lg" color="primary" variant="solid">Add</Button>
+              <Button size="lg" color="primary" variant="solid">{t("Button.add")}</Button>
             </ModalFooter>
           </>
         )}

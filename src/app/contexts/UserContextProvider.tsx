@@ -1,15 +1,15 @@
 "use client";
 
 import { createContext, useEffect } from "react";
-import { TypeUser } from "@/app/lib/definitions.user";
+import { UserType } from "@/app/lib/definitions.user";
 import { useReducer } from "react";
 import { useContext } from "react";
 
 
-export const UserContext = createContext<TypeUser>(null as any);
+export const UserContext = createContext<UserType>(null as any);
 export const UserDispatchContext = createContext(null as any);
 
-export function UserContextProvider({ children, value }: {children: React.ReactNode, value: TypeUser}) {
+export function UserContextProvider({ children, value }: {children: React.ReactNode, value: UserType}) {
   
   const [user, dispatch] = useReducer(
     userReducer,
@@ -37,7 +37,7 @@ export function useUserDispatch() {
   return useContext(UserDispatchContext);
 }
 
-function userReducer(value: TypeUser, action: any) {
+function userReducer(value: UserType, action: any) {
   switch (action.type) {
     case 'set': {
       return action.payload;

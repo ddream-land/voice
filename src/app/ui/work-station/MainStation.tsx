@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
-import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import VoiceModelListHeader from "./VoiceModelListHeader";
-import { InfType, TypeVoiceModel, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
+import { InfType, VoiceModelType, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 import { cn } from "@nextui-org/react";
 import VoiceInfDrawerModal from "../components/voice-inf/VoiceInfDrawerModal";
@@ -21,10 +19,7 @@ function MainStation({
   onInfSuccess: (newInf: VoiceInfHistoryType) => void
   onSendingChange?: ({sending, infType} : {sending: boolean, infType: InfType}) => void
 }) {
-  const router = useRouter();
   const t = useTranslations();
-  const amDispatch = useAmDispatch();
-  const [isOpenParams, setIsOpenParams] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const [isEmpty, setIsEmpty] = useState(false);
@@ -32,7 +27,7 @@ function MainStation({
   const searchParams = useSearchParams()
   const searchPublishId = searchParams.get('publishId') || ''
 
-  const [selectedVoiceModel, setSelectedVoiceModel] = useState<TypeVoiceModel | null >(null);
+  const [selectedVoiceModel, setSelectedVoiceModel] = useState<VoiceModelType | null >(null);
 
   const [filters, setFilters] = useState<VoiceModelFilterType>({
     type: "browse",
@@ -51,7 +46,7 @@ function MainStation({
       name: ''
     });
     if (res && res.code === 0) {
-      let newVoiceModelList: TypeVoiceModel[] = res.data.list;
+      let newVoiceModelList: VoiceModelType[] = res.data.list;
       let selectNewVoiceModelItem = newVoiceModelList.find(voiceModel => voiceModel.publish_id === searchPublishId)
       if (selectNewVoiceModelItem) {
         setSelectedVoiceModel(selectNewVoiceModelItem);

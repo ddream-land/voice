@@ -23,6 +23,7 @@ import { getModelId, voiceModelPublish } from "@/app/lib/voice.api";
 import PublishResultModal from "./PublishResultModal";
 import { findIndex, uniqBy } from "lodash-es";
 import { handleConfetti } from "@/app/lib/utils";
+import { useTranslations } from "next-intl";
 
 function PublishVoiceModelModal({
   isOpen = false,
@@ -37,6 +38,7 @@ function PublishVoiceModelModal({
   onChange: (isOpen: boolean) => void // 类型定义为函数，用于处理模态框的打开和关闭
   onSuccess: () => void
 }) {
+  const t = useTranslations();
   const uploadModal = useDisclosure({
     isOpen,
     onClose: () => onChange(false),
@@ -63,60 +65,60 @@ function PublishVoiceModelModal({
 
   const UploadFormSchema = z.object({
     gptWeightsUrl: z.string({
-      required_error: "gptWeightsUrl is required",
-      invalid_type_error: "gptWeightsUrl must be a string",
-    }).url({message: 'Please enter a valid URL for the GPT weights'}), 
+      required_error: t("PublishVoiceModel.formError.gptRequired"),
+      invalid_type_error: t("PublishVoiceModel.formError.gptRequired"),
+    }).url({message: t("PublishVoiceModel.formError.gptRequired")}), 
     sovitsWeightsUrl: z.string({
-      required_error: "sovitsWeightsUrl is required",
-      invalid_type_error: "sovitsWeightsUrl must be a string",
-    }).url({message: 'Please enter a valid URL for the Sovits weights'}), 
+      required_error: t("PublishVoiceModel.formError.sovitsRequired"),
+      invalid_type_error: t("PublishVoiceModel.formError.sovitsRequired"),
+    }).url({message: t("PublishVoiceModel.formError.sovitsRequired")}), 
     tone: z.array(z.object({
       tone_type: z.string({
-        required_error: "tone_type is required",
-        invalid_type_error: "tone_type must be a string",
+        required_error: t("PublishVoiceModel.formError.toneTypeRequired"),
+        invalid_type_error: t("PublishVoiceModel.formError.toneTypeRequired"),
       }),
       audio_url: z.string({
-        required_error: "audio_url is required",
-        invalid_type_error: "audio_url must be a string",
-      }).url({message: 'Please enter a valid URL for the tone'}),
+        required_error: t("PublishVoiceModel.formError.toneAudioUrlRequired"),
+        invalid_type_error: t("PublishVoiceModel.formError.toneAudioUrlRequired"),
+      }).url({message: t("PublishVoiceModel.formError.toneAudioUrlRequired")}),
       text: z.string({
-        invalid_type_error: "text must be a string",
-      }).min(1, { message: "text is required" }),
-    })).min(1, {message: 'Please upload at least one tone'}),
+        invalid_type_error: t("PublishVoiceModel.formError.toneTextRequired"),
+      }).min(1, { message: t("PublishVoiceModel.formError.toneTextRequired")}),
+    })).min(1, {message: t("PublishVoiceModel.formError.toneRequired")}),
   });
 
   const SelectFormSchema = z.object({
     modelId: z.string({
-      required_error: "select model is required",
-    }).min(1, { message: "select model is required" }),
+      required_error: t("PublishVoiceModel.formError.modelIdRequired"),
+    }).min(1, { message: t("PublishVoiceModel.formError.modelIdRequired") }),
     tone: z.array(z.object({
       tone_type: z.string({
-        required_error: "tone_type is required",
-        invalid_type_error: "tone_type must be a string",
+        required_error: t("PublishVoiceModel.formError.toneTypeRequired"),
+        invalid_type_error: t("PublishVoiceModel.formError.toneTypeRequired"),
       }),
       audio_url: z.string({
-        required_error: "audio_url is required",
-        invalid_type_error: "audio_url must be a string",
-      }).url({message: 'Please enter a valid URL for the tone'}),
+        required_error: t("PublishVoiceModel.formError.toneAudioUrlRequired"),
+        invalid_type_error: t("PublishVoiceModel.formError.toneAudioUrlRequired"),
+      }).url({message: t("PublishVoiceModel.formError.toneAudioUrlRequired")}),
       text: z.string({
-        invalid_type_error: "text must be a string",
-      }).min(1, { message: "text is required" }),
-    })).min(1, {message: 'Please upload at least one tone'}),
+        invalid_type_error: t("PublishVoiceModel.formError.toneTextRequired"),
+      }).min(1, { message: t("PublishVoiceModel.formError.toneTextRequired")}),
+    })).min(1, {message: t("PublishVoiceModel.formError.toneRequired")}),
   });
 
   const VoiceInfoSchema = z.object({
     cover:z.string({
-      required_error: "cover is required",
-      invalid_type_error: "cover must be a string",
-    }).url({message: 'Please enter a valid URL for the cover'}),
+      required_error: t("PublishVoiceModel.formError.voiceInfoCoverRequired"),
+      invalid_type_error: t("PublishVoiceModel.formError.voiceInfoCoverRequired"),
+    }).url({message: t("PublishVoiceModel.formError.voiceInfoCoverRequired")}),
     name:z.string({
-      required_error: "name is required",
-      invalid_type_error: "name must be a string",
-    }).min(1, { message: "name is required" }),
+      required_error: t("PublishVoiceModel.formError.voiceInfoNameRequired"),
+      invalid_type_error: t("PublishVoiceModel.formError.voiceInfoNameRequired"),
+    }).min(1, { message: t("PublishVoiceModel.formError.voiceInfoNameRequired") }),
     type:z.string({
-      required_error: "type is required",
-      invalid_type_error: "type must be a string",
-    }).min(1, { message: "type is required" }),
+      required_error: t("PublishVoiceModel.formError.voiceInfoTypeRequired"),
+      invalid_type_error: t("PublishVoiceModel.formError.voiceInfoTypeRequired"),
+    }).min(1, { message: t("PublishVoiceModel.formError.voiceInfoTypeRequired")}),
   });
 
   const getModelIdApi = getModelId();
@@ -177,7 +179,7 @@ function PublishVoiceModelModal({
         type: "add",
         payload: {
           type: "error",
-          message: 'Tone type must be unique',
+          message: t("PublishVoiceModel.formError.toneTypeMustUnique"),
         },
       })
       return;
@@ -188,7 +190,7 @@ function PublishVoiceModelModal({
         type: "add",
         payload: {
           type: "error",
-          message: 'Please add at least one neutral tone'
+          message: t("PublishVoiceModel.formError.toneTypeMustHaveNeutral")
         }
       })
       return;
@@ -283,7 +285,7 @@ function PublishVoiceModelModal({
                       onPress={() => {
                         nextButtonHandler();
                       }}
-                    >Next</Button>
+                    >{t("Button.next")}</Button>
                   )}
                   {step === 2 && (
                     <>
@@ -293,13 +295,13 @@ function PublishVoiceModelModal({
                         variant="ghost"
                         startContent={<ArrowLeftIcon className="w-6 h-6 fill-white" />}
                         onPress={() => setStep(1)}
-                      >Previous</Button>
+                      >{t("Button.previous")}</Button>
                       <Button
                         size="lg"
                         color="primary"
                         variant="ghost"
                         onPress={publishHandler}
-                      >Publish</Button>
+                      >{t("Button.publish")}</Button>
                     </>
                   )}
                 </div>

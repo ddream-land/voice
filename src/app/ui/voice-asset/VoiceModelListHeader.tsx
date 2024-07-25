@@ -7,29 +7,12 @@ import DCubeIcon from "@/app/icons/3DCubeIcon";
 import PublishVoiceModelModal from "../components/publish-select-voice-model/PublishVoiceModelModal";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 import { useRouter } from "@/navigation";
+import { useTranslations } from "next-intl";
 
 type TypeFilterItem = {
   label: string;
   value: string;
 };
-
-const types: Array<TypeFilterItem> = [{
-  label: "All",
-  value: "",
-}, {
-  label: "Girl",
-  value: "gril",
-}, {
-  label: "Boy",
-  value: "boy",
-}, {
-  label: "Male",
-  value: "male",
-}, {
-  label: "Female",
-  value: "female",
-}] 
-
 
 function VoiceListHeader({
   filters= {
@@ -42,9 +25,28 @@ function VoiceListHeader({
   onChange: (newFilters: VoiceModelFilterType) => void
 }) {
   const router = useRouter();
+  const t = useTranslations();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
+  const types: Array<TypeFilterItem> = [{
+    label: t("VoiceType.all"),
+    value: "",
+  }, {
+    label: t("VoiceType.girl"),
+    value: "girl",
+  }, {
+    label: t("VoiceType.boy"),
+    value: "boy",
+  }, {
+    label: t("VoiceType.male"),
+    value: "male",
+  }, {
+    label: t("VoiceType.female"),
+    value: "female",
+  }] 
+
+  
   return (
     <div className="self-stretch justify-between items-center flex flex-col bg-neutral-900 px-8 pt-6 w-full">
       <div className="h-[40px] justify-between items-center gap-6 flex w-full">
@@ -56,7 +58,7 @@ function VoiceListHeader({
           }}
           type="text"
           variant="bordered"
-          placeholder="Search"
+          placeholder={t("VoiceAsset.searchPlaceholder")}
           startContent={<MagnifyingGlassIcon className="w-6 h-6 fill-zinc-400" />}
           value={filters.name || ""}
           onChange={(e: any) => {
@@ -88,7 +90,7 @@ function VoiceListHeader({
                 className="w-[200px] justify-between"
                 endContent={<ChevronDownIcon className="h-4 w-4" />}
               >
-                Publish
+                {t("VoiceAsset.publish")}
               </Button>
             </DropdownTrigger>
             <DropdownMenu 
@@ -102,8 +104,8 @@ function VoiceListHeader({
                 }
               }}
             >
-              <DropdownItem key="local">From Local</DropdownItem>
-              <DropdownItem key="online">From My Voice Lib</DropdownItem>
+              <DropdownItem key="local">{t("VoiceAsset.publishFormLocal")}</DropdownItem>
+              <DropdownItem key="online">{t("VoiceAsset.publishFormMyVoiceLib")}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           <Button
@@ -115,7 +117,7 @@ function VoiceListHeader({
             onPress={() => {
               router.push('/myvoicemodels');
             }}
-          >Train My Voice</Button>
+          >{t("VoiceAsset.trainMyVoiceBtn")}</Button>
         </div>
       </div>
 

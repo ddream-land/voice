@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
-import VoiceHistoryControl from "./VoiceHistoryControl";
 import VoiceHistoryList from "./VoiceHistoryList";
-import { Card, Skeleton } from "@nextui-org/react";
 import { InfType, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 
@@ -17,7 +14,6 @@ function VoiceHistory({
   newInfList: Array<VoiceInfHistoryType>
   infType: InfType
 }) {
-  const router = useRouter();
   const t = useTranslations();
   const [voiceList, setVoiceList] = useState<VoiceInfHistoryType[] | null>(null);
 
@@ -32,7 +28,7 @@ function VoiceHistory({
       <div className="fixed top-20 right-0 w-[380px] z-40">
         <div className="px-8 pt-8 bg-neutral-900">
           <div className="self-stretch justify-between items-center inline-flex w-full">
-            <div className="text-white text-xl font-semibold  leading-normal">History</div>
+            <div className="text-white text-xl font-semibold  leading-normal">{t("WorkStation.voiceHistoryTitle")}</div>
           </div>
         </div>
       </div>
@@ -41,7 +37,7 @@ function VoiceHistory({
         {sending && (
           <div className="justify-start items-start gap-5 inline-flex mt-2">
             <SparklesIcon className="w-6 h-6 fill-violet-500" />
-            <div className="text-gray-500 text-base font-normal  leading-normal">Generating for you…</div>
+            <div className="text-gray-500 text-base font-normal  leading-normal">{t("WorkStation.voiceHistoryGenerating")}</div>
           </div>
         )}
         

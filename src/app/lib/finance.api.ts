@@ -9,7 +9,6 @@ const apiUrlList = {
 }
 
 export function getFinanceSales() {
-  const t = useTranslations();
   return baseApiHander({
     url: apiUrlList.getSales,
     mustLogin: true,
@@ -18,7 +17,6 @@ export function getFinanceSales() {
 }
 
 export function financeExchange() {
-  const t = useTranslations();
   return baseApiHander({
     url: apiUrlList.exchange,
     mustLogin: true,
@@ -27,7 +25,6 @@ export function financeExchange() {
 }
 
 export function getFinanceBags() {
-  const t = useTranslations();
   return baseApiHander({
     url: apiUrlList.getBags,
     mustLogin: true,

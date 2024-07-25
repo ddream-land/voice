@@ -4,7 +4,6 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useTranslations } from "next-intl";
 import { useAmDispatch } from "../alter-message/AlterMessageContextProvider";
 import Dropzone from 'react-dropzone'
-import { uploadFileToServer } from "@/app/lib/common.api";
 import { Progress, Spinner } from "@nextui-org/react";
 import { customAlphabet } from "nanoid";
 import { uploadModelFile } from "@/app/lib/voice.api";
@@ -74,7 +73,7 @@ function UploadVoiceModelFile({
 
   const uploadModelFileApi = uploadModelFile((progressEvent: any) => {
     setLoaded(progressEvent.loaded);
-    setTotal(progressEvent.total);
+    setTotal(progressEvent.total + 1);
   });
 
   const onDropHander = async (acceptedFiles: any) => {
@@ -87,7 +86,7 @@ function UploadVoiceModelFile({
       amDispatch({
         type: "add",
         payload: {
-          message: 'Please select a model first',
+          message: t("PublishVoiceModel.uploadVoiceModelFileError"),
           type: "error",
         },
       })
@@ -170,7 +169,7 @@ function UploadVoiceModelFile({
             )}
           </div>
           <div className="w-full absolute bottom-0 left-0">
-            {loaded !== total && (
+            {loaded !== total &&  isUploading && (
               <Progress size="sm" aria-label="Loading..." value={loaded} maxValue={total} />
             )}
           </div>

@@ -6,19 +6,21 @@ import EmptyIcon from "@/app/icons/EmptyIcon";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DCubeIcon from "@/app/icons/3DCubeIcon";
 import PublishVoiceModelModal from "../components/publish-select-voice-model/PublishVoiceModelModal";
-import { TypeVoiceModel } from "@/app/lib/definitions.voice";
+import { VoiceModelType } from "@/app/lib/definitions.voice";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 import VoiceModelDetailDrawerModal from "../components/voice-model-detail/VoiceModelDetailDrawerModal";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 const VoiceModelList = dynamic(() => import('../components/voice-model-list/VoiceModelList'), { ssr: false })
 
 function VoiceAsset() {
+  const t = useTranslations();
   const [isEmpty, setIsEmpty] = useState(false);
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
-  const [selectedVoiceModel, setSelectedVoiceModel] = useState<TypeVoiceModel | null >(null);
+  const [selectedVoiceModel, setSelectedVoiceModel] = useState<VoiceModelType | null >(null);
 
   const searchParams = useSearchParams()
   const searchPublishId = searchParams.get('publishId') || ''
@@ -75,7 +77,7 @@ function VoiceAsset() {
                       className="w-[200px] justify-between"
                       endContent={<ChevronDownIcon className="h-4 w-4" />}
                     >
-                      Publish
+                      {t("VoiceAsset.publish")}
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu 
@@ -89,11 +91,11 @@ function VoiceAsset() {
                       }
                     }}
                   >
-                    <DropdownItem key="local">From Local</DropdownItem>
-                    <DropdownItem key="online">From My Voice Lib</DropdownItem>
+                    <DropdownItem key="local">{t("VoiceAsset.publishFormLocal")}</DropdownItem>
+                    <DropdownItem key="online">{t("VoiceAsset.publishFormMyVoiceLib")}</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
-                <Button size="lg" variant="flat" className="w-[200px]" startContent={<DCubeIcon className="h-6 w-6 fill-zinc-400" />}>Train My Voice</Button>
+                <Button size="lg" variant="flat" className="w-[200px]" startContent={<DCubeIcon className="h-6 w-6 fill-zinc-400" />}>{t("VoiceAsset.trainMyVoiceBtn")}</Button>
               </div>
             </div>
           )}

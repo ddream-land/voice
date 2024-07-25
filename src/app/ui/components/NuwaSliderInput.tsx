@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { Input, Slider, Tooltip } from "@nextui-org/react";
 
 function NuwaSliderInput({
@@ -20,7 +19,6 @@ function NuwaSliderInput({
   onChange: (value: number) => void;
 }) {
   const t = useTranslations();
-  const amDispatch = useAmDispatch();
 
   const [inputValue, setInputValue] = React.useState(String(value));
 
@@ -58,7 +56,7 @@ function NuwaSliderInput({
         <output>
           <Tooltip
             className="text-tiny text-default-500 rounded-md"
-            content="Press Enter to confirm"
+            content={t("VoiceInf.sliderTooltip")}
             placement="left"
           >
             <Input

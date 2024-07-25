@@ -1,21 +1,17 @@
 "use client";
-import DCubeIcon from "@/app/icons/3DCubeIcon";
 import { ArrowDownTrayIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 import { CheckBadgeIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
-import { Button, Snippet, Avatar, Tooltip } from "@nextui-org/react";
+import { Button, Snippet, Tooltip } from "@nextui-org/react";
 import React, { useState } from "react";
 import { VoiceModelPublishType } from "@/app/lib/definitions.voice";
 import { getStarNumStr } from "@/app/lib/utils";
 import moment from 'moment';
 import VoiceModelCollectButton from "./VoiceModelCollectButton";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import VoiceModelDownloadButton from "../voice-model-download-button/VoiceModelDownloadButton";
 import ShareIcon from "@/app/icons/ShareIcon";
-import { StarIcon } from "@heroicons/react/24/solid";
-import DownloadIcon from "@/app/icons/DownloadIcon";
-import { BeakerIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "@/navigation";
 import VoiceModelDetailPublisher from "./VoiceModelDetailPublisher";
+import { useTranslations } from "next-intl";
 
 function VoiceAssetDetailRight({
   voicePublishInfo, 
@@ -23,7 +19,7 @@ function VoiceAssetDetailRight({
   voicePublishInfo: VoiceModelPublishType
 }) {
   const router = useRouter();
-  const [startDownload, setStartDownload] = useState(0);
+  const t = useTranslations();
   const [startGptDownload, setStartGptDownload] = useState(0);
   const [startSovitsDownload, setStartSovitsDownload] = useState(0);
   const [downloading, setDownlanding] = useState(false);
@@ -50,7 +46,7 @@ function VoiceAssetDetailRight({
             // setIsOpen(true)
             router.push(`/workstation?publishId=${voicePublishInfo.publish_id}`);
           }}
-        >Run on WorkStation</Button>
+        >{t("VoiceModelDetail.runOnWorkStation")}</Button>
         {voicePublishInfo.publish_info.permission.download_permission && (
           <>
             <VoiceModelDownloadButton
@@ -69,7 +65,7 @@ function VoiceAssetDetailRight({
                 setDownlanding(newDownloading);
               }}
             />
-            <Tooltip content="Download CKPT File">
+            <Tooltip content={t("VoiceModelDetail.downloadCKPTFile")}>
               <Button
                 disableRipple={false}
                 size="lg"
@@ -82,7 +78,7 @@ function VoiceAssetDetailRight({
                 isDisabled={downloading}
                 />
             </Tooltip>
-            <Tooltip content="Download PTH File">
+            <Tooltip content={t("VoiceModelDetail.downloadPTHFile")}>
               <Button
                 disableRipple={false}
                 size="lg"
@@ -114,7 +110,7 @@ function VoiceAssetDetailRight({
         <div className="self-stretch justify-start items-start inline-flex">
           <div className="grow shrink basis-0 py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 inline-flex">
             <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-              Runnings
+            {t("VoiceModelDetail.runnings")}
             </div>
             <div className="self-stretch text-white text-sm font-semibold leading-tight">
               {getStarNumStr(voicePublishInfo.inf_num)}
@@ -122,7 +118,7 @@ function VoiceAssetDetailRight({
           </div>
           <div className="grow shrink basis-0 py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 inline-flex">
             <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-              Downloads
+              {t("VoiceModelDetail.downloads")}
             </div>
             <div className="self-stretch text-white text-sm font-semibold leading-tight">
               {getStarNumStr(voicePublishInfo.d_num)}
@@ -130,7 +126,7 @@ function VoiceAssetDetailRight({
           </div>
           <div className="grow shrink basis-0 py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 inline-flex">
             <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-              Sharing
+              {t("VoiceModelDetail.sharing")}
             </div>
             <div className="self-stretch text-white text-sm font-semibold leading-tight">
               {getStarNumStr(voicePublishInfo.star_num)}
@@ -139,7 +135,7 @@ function VoiceAssetDetailRight({
         </div>
         <div className="self-stretch h-[68px] py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 flex">
           <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-            By
+          {t("VoiceModelDetail.by")}
           </div>
           <div className="self-stretch justify-center items-start gap-2.5 inline-flex">
             {/* <div className="text-white text-sm font-semibold leading-tight">
@@ -153,7 +149,7 @@ function VoiceAssetDetailRight({
         </div>
         <div className="self-stretch h-[68px] py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 flex">
           <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-            Time
+            {t("VoiceModelDetail.time")}
           </div>
           <div className="text-white text-sm font-semibold leading-tight">
           {moment(voicePublishInfo.seq, "X").format('hh:mm MMMM DD YYYY')}
@@ -161,15 +157,15 @@ function VoiceAssetDetailRight({
         </div>
         <div className="self-stretch h-[68px] py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 flex">
           <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-            Source
+            {t("VoiceModelSource.source")}
           </div>
           <div className="self-stretch justify-start items-center gap-2.5 inline-flex">
             <div className="text-white text-sm font-semibold leading-tight">
-              {voicePublishInfo.publish_info.source === 'original' ? 'Original' : 'Reprint'}
+              {voicePublishInfo.publish_info.source === 'original' ? t("VoiceModelSource.original") : t("VoiceModelSource.reprinting")}
             </div>
             {voicePublishInfo.publish_info.source !== 'original' && voicePublishInfo.publish_info.source.length > 0 && (
               <div className="grow shrink basis-0 text-white text-sm font-semibold leading-tight">
-                From: {voicePublishInfo.publish_info.source}
+                {t("VoiceModelDetail.sourceFrom")}: {voicePublishInfo.publish_info.source}
               </div>
             )} 
             
@@ -177,7 +173,7 @@ function VoiceAssetDetailRight({
         </div>
         <div className="self-stretch py-3 border-t border-white/opacity-10 flex-col justify-center items-start gap-2 flex">
           <div className="self-stretch text-zinc-400 text-xs font-normal leading-none">
-            Permissions
+          {t("VoiceModelPermission.permissions")}
           </div>
           <div className="flex-col justify-center items-start gap-2 flex">
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -187,7 +183,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.download_permission ? 'Free download' : 'Do not allow downloads'}
+                {voicePublishInfo.publish_info.permission.download_permission ? t("VoiceModelPermission.freedownloadTrue") : t("VoiceModelPermission.freedownloadFalse")}
               </div>
             </div>
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -197,7 +193,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.credit_free ? 'Credit Free' : 'Credit Free'}
+                {voicePublishInfo.publish_info.permission.credit_free ? t("VoiceModelPermission.creditFreeTrue") : t("VoiceModelPermission.creditFreeFalse")}
               </div>
             </div>
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -207,7 +203,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.reprint_allowed ? 'Reprint Allowed' : 'Reprint Allowed'}
+                {voicePublishInfo.publish_info.permission.reprint_allowed ? t("VoiceModelPermission.reprintAllowed") : t("VoiceModelPermission.reprintDeclined")}
               </div>
             </div>
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -217,7 +213,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.modification_allowed ? 'Modification Allowed' : 'Modification Declined'}
+                {voicePublishInfo.publish_info.permission.modification_allowed ? t("VoiceModelPermission.modificationAllowed") : t("VoiceModelPermission.modificationDeclined")}
               </div>
             </div>
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -227,7 +223,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.permission_change_allowed ? 'Permission Change Allowed' : 'Permission Change Declined'}
+                {voicePublishInfo.publish_info.permission.permission_change_allowed ? t("VoiceModelPermission.permissionChangeAllowed") : t("VoiceModelPermission.permissionChangeDeclined")}
               </div>
             </div>
             <div className="w-full justify-start items-center gap-2 inline-flex">
@@ -237,7 +233,7 @@ function VoiceAssetDetailRight({
                 <XCircleIcon className="w-5 h-5 fill-rose-600" />
               )}
               <div className="text-white text-sm font-semibold leading-tight">
-                {voicePublishInfo.publish_info.permission.commercial_license ? 'Commercial Use Allowed' : 'Commercial Use Declined'}
+                {voicePublishInfo.publish_info.permission.commercial_license ? t("VoiceModelPermission.commercialUseAllowed") : t("VoiceModelPermission.commercialUseDeclined")}
               </div>
             </div>
           </div>

@@ -5,9 +5,9 @@ import { Button, Input, Pagination } from "@nextui-org/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { deleteVoiceTrain, getVoiceTrainRecords } from "@/app/lib/voice.api";
-import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { voiceTrainRecordType } from "@/app/lib/definitions.voice";
 import TrainItemSkeleton from "./TrainItemSkeleton";
+import { useTranslations } from "next-intl";
 
 const TaskStatusMap = {
   '1': 'notstart',
@@ -24,7 +24,7 @@ function TrainList({
 }:{
   onChange: (voiceTrainRecordsList: []) => void;
 }) {
-  const amDispatch = useAmDispatch();
+  const t = useTranslations();
   const [loading, setLoading] = useState(false);
   const [voiceTrainRecordsList, setVoiceTrainRecordsList] = useState<voiceTrainRecordType[]>([]) 
   const [total, setTotal] = useState(0)
@@ -120,7 +120,7 @@ function TrainList({
           type="text"
           variant="bordered"
           color="default"
-          placeholder="Search"
+          placeholder={t("MyVoiceModels.searchPlaceholder")}
           size="sm"
           value={search}
           onChange={(e) => {
@@ -138,7 +138,7 @@ function TrainList({
             startContent={<TrashIcon className="w-5 h-5" />}
             isDisabled={selectedIds.length === 0}
             onPress={deleteVoiceTrainServer}
-          >Delete</Button>
+          >{t("Button.delete")}</Button>
         )}
         
       </div>
@@ -179,7 +179,7 @@ function TrainList({
 
       <div className="w-full h-8 justify-between items-center inline-flex">
         <div className="text-zinc-400 text-sm font-normal leading-tight">
-          {(currentPage-1)*pageSize+1}-{currentPage === Math.ceil(total/pageSize) ? total : pageSize*currentPage} of {total} items
+          {(currentPage-1)*pageSize+1}-{currentPage === Math.ceil(total/pageSize) ? total : pageSize*currentPage} {t("Pagination.of")} {total} {t("Pagination.items")}
         </div>
         {total > 0 && (
           <Pagination total={ Math.ceil(total/pageSize) } page={currentPage} onChange={(page)=> {

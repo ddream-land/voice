@@ -119,7 +119,7 @@ function VoiceHistoryList({
         <div className="w-full h-full flex flex-col justify-center items-center gap-12">
           <div className="flex-col justify-center items-center gap-4 flex">
             <EmptyIcon className="w-12 h-12" />
-            <div className="text-center text-zinc-500 text-sm font-medium ">The queue is empty<br/>Try to generate something</div>
+            <div className="text-center text-zinc-500 text-sm font-medium ">{t("WorkStation.voiceHistoryEmpty")}</div>
           </div>
         </div>
       )}

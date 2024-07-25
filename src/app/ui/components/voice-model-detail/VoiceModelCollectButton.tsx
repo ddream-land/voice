@@ -4,6 +4,7 @@ import { Button, cn } from "@nextui-org/react";
 import React, { useState } from "react";
 import { voiceModelCancelCollect, voiceModelCollect } from "@/app/lib/voice.api";
 import { getStarNumStr } from "@/app/lib/utils";
+import { useTranslations } from "next-intl";
 
 function VoiceModelCollectButton({
   like,
@@ -14,6 +15,7 @@ function VoiceModelCollectButton({
   publishId: string
   starNum: number
 }) {
+  const t = useTranslations();
   const [collecting, setCollecting] = useState(false);
   const [isCollected, setIsCollected] = useState(like);
 
@@ -71,7 +73,7 @@ function VoiceModelCollectButton({
       startContent={<StarIcon className={cn("w-6 h-6",(isCollected ? "fill-amber-500" : "fill-zinc-400"))} />}
       onPress={isCollected ? voiceModelCancelCollectServer : voiceModelCollectServer}
       className="w-40"
-    >Star {computerStarNumStr()} </Button>
+    >{t("Button.star")} {computerStarNumStr()} </Button>
   );
 }
 

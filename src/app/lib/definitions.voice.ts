@@ -14,7 +14,9 @@ export type InstantGenerateParamsterType = {
   text: string,
   basic_params: VoiceModelBasicParamsType,
   advance_params: VoiceModelAdvancedParamsType,
-  tone: VoiceModelToneType
+  tone: VoiceModelToneType,
+  price: number
+  code: string
 }
 
 export type VoiceInfHistoryType = {
@@ -174,7 +176,7 @@ export type VoiceModelFilterType = {
 
 export type InfType = 'audio' | 'code';
 
-export type TypeVoiceModel = {
+export type VoiceModelType = {
   id: number;
   src: string,
   name: string,
@@ -191,20 +193,6 @@ export type TypeVoiceApi = {
   name: string,
   count: number,
 };
-
-export const voiceModelTypeList = [{
-  value: "male",
-  label: "Male",
-}, {
-  value: "female",
-  label: "Female",
-}, {
-  value: "boy",
-  label: "Boy",
-}, {
-  value: "girl",
-  label: "Girl",
-}]
 
 export type voiceTrainRecordType = {
   id: string

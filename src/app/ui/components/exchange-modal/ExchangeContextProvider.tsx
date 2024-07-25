@@ -7,7 +7,7 @@ import ExchangeModal, { ExchangeModalProps } from './ExchangeModal';
 export const ExchangeContext = createContext({} as ExchangeModalProps);
 export const ExchangeDispatchContext = createContext(null as any);
 
-const initialState : ExchangeModalProps = { isOpen: false, regetCount: 0 };
+const initialState : ExchangeModalProps = { isOpen: false, regetCount: 0, value: 0 };
 
 export function ExchangeContextProvider({ children }: {children: React.ReactNode}) {
   const [props , dispatch] = useImmerReducer(

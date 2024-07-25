@@ -3,7 +3,8 @@ import { useTranslations } from "next-intl";
 
 
 const commonUrlList = {
-  uploadFile: `/ddream/api/v1/common/upload_file`
+  uploadFile: `/ddream/api/v1/common/upload_file`,
+  hearbeat: `/ddream/api/v1/common/heartbeat`
 }
 
 export function uploadFileToServer(onUploadProgress: any) {
@@ -13,5 +14,12 @@ export function uploadFileToServer(onUploadProgress: any) {
     isBody: true,
     isUpload: true,
     onUploadProgress: onUploadProgress
+  })
+}
+
+export function hearbeat() {
+  const t = useTranslations();
+  return baseApiHander({
+    url: commonUrlList.hearbeat
   })
 }

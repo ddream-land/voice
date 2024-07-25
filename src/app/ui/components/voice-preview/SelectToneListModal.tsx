@@ -1,10 +1,11 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAmDispatch } from "../alter-message/AlterMessageContextProvider";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { VoiceModelToneType } from "@/app/lib/definitions.voice";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import ToneVoiceFile from "./ToneVoiceFile";
+import { useTranslations } from "next-intl";
 
 type opToneType = {
   tone: VoiceModelToneType,
@@ -18,6 +19,7 @@ function SelectToneListModal({
   toneList: Array<VoiceModelToneType>
   onDone?: (selectedTones: Array<VoiceModelToneType>)=>void
 }) {
+  const t = useTranslations();
   const amDispatch = useAmDispatch();
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const initOpToneList = () => {
@@ -29,7 +31,6 @@ function SelectToneListModal({
     });
   }
   const [opToneList, setOpToneList] = useState<Array<opToneType>>(initOpToneList)
-  const [selectedTones, setSelectedTones] = useState<Array<VoiceModelToneType>>([]);
   
   return (
     <>
@@ -37,7 +38,7 @@ function SelectToneListModal({
         <div className="cursor-pointer w-full h-full p-4 rounded-2xl border-dashed border-2 border-zinc-700 flex-col justify-center items-center gap-2 inline-flex" >
         <PlusCircleIcon className="w-6 h-6 stroke-zinc-400" />
           <div className="text-center text-zinc-400 text-xs font-medium ">
-            Select From Training Audio File
+            {t("PublishVoiceModel.selectToneListModalLabel")}
           </div>
         </div>
       </div>
@@ -45,7 +46,7 @@ function SelectToneListModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Select Emotion</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{t("PublishVoiceModel.selectToneListModalTitle")}</ModalHeader>
               <ModalBody>
                 <div className="w-full flex flex-col gap-3">
                   {opToneList.map((toneItem, index) => (
@@ -106,7 +107,7 @@ function SelectToneListModal({
                       type: "add",
                       payload: {
                         type: "error",
-                        message: "Please select at least one tone",
+                        message: t("PublishVoiceModel.formError.toneRequired")
                       },
                     })
                     return
@@ -114,7 +115,7 @@ function SelectToneListModal({
                   onDone && onDone(selectedToneList);
                   onClose();
                 }}>
-                  Add
+                  {t("Button.add")}
                 </Button>
               </ModalFooter>
             </>

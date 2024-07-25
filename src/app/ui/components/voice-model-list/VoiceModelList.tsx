@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import VoiceModelItem from "./VoiceModelItem";
-import { TypeVoiceModel } from "@/app/lib/definitions.voice";
+import { VoiceModelType } from "@/app/lib/definitions.voice";
 import VoiceModelItemSkeleton from "./VoiceModelItemSkeleton";
 import { ScrollShadow } from "@nextui-org/react";
 import InfiniteScroll from "../infinite-scroll/InfiniteScroll";
@@ -17,10 +17,10 @@ function VoiceModelList({
   onChange,
 }: {
   filters?: VoiceModelFilterType
-  selectedVoiceModel?: TypeVoiceModel | null;
+  selectedVoiceModel?: VoiceModelType | null;
   type?: 'workstation' | 'my' | 'all';
-  onItemClick?: (voiceModel: TypeVoiceModel | null) => void;
-  onChange?: (voiceModelList: TypeVoiceModel[]) => void;
+  onItemClick?: (voiceModel: VoiceModelType | null) => void;
+  onChange?: (voiceModelList: VoiceModelType[]) => void;
 }) {
   let getVoiceModelListApi: any;
   if (type === 'my') {
@@ -29,12 +29,12 @@ function VoiceModelList({
     getVoiceModelListApi = getPublishSquare();
   }
 
-  const initVoiceModelList:Array<TypeVoiceModel> = []
+  const initVoiceModelList:Array<VoiceModelType> = []
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [nextPageToken, setNextPageToken] = useState("");
-  const [voiceModelList, setVoiceModelList] = useState<TypeVoiceModel[]>(initVoiceModelList);
+  const [voiceModelList, setVoiceModelList] = useState<VoiceModelType[]>(initVoiceModelList);
   
   const [prevFilters, setPrevFilters] = useState(filters);
 
@@ -63,7 +63,7 @@ function VoiceModelList({
     if (res && res.code === 0) {
       onChange && onChange(res.data.list);
       
-      let newVoiceModelList: TypeVoiceModel[] = res.data.list;
+      let newVoiceModelList: VoiceModelType[] = res.data.list;
       if (isFirst) {
         setCount(newVoiceModelList.length);
         setVoiceModelList([...newVoiceModelList]);

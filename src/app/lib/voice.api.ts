@@ -22,6 +22,7 @@ const voiceUrlList = {
   voiceInf: `/ddream/api/v1/voice/inf`,
   getVoiceModelInfo: `/ddream/api/v1/voice/model/info`,
   taskRetrain: `/ddream/api/v1/task/retrain`,
+  getInfCost: `/ddream/api/v1/voice/inf/cost`,
 }
 
 export function getPublishSquare() {
@@ -195,6 +196,15 @@ export function taskRetrain() {
   const t = useTranslations();
   return baseApiHander({
     url: voiceUrlList.taskRetrain,
+    mustLogin: true,
+    noLoginGotoLogin: true,
+  })
+}
+
+export function getInfCost() {
+  const t = useTranslations();
+  return baseApiHander({
+    url: voiceUrlList.getInfCost,
     mustLogin: true,
     noLoginGotoLogin: true,
   })

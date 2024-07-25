@@ -7,7 +7,7 @@ import PlayButton from "../voice-preview/PlayButton";
 import DownloadIcon from "@/app/icons/DownloadIcon";
 import { BeakerIcon } from "@heroicons/react/24/outline";
 import GPTSovitsIcon from "@/app/icons/GPTSovitsIcon";
-import { TypeVoiceModel } from "@/app/lib/definitions.voice";
+import { VoiceModelType } from "@/app/lib/definitions.voice";
 import { getStarNumStr } from "@/app/lib/utils";
 import CommercialLicenseIcon from "./CommercialLicenseIcon";
 import VoiceModelCollectButton from "./VoiceModelCollectButton";
@@ -21,7 +21,7 @@ function VoiceModelItem({
   voice: any,
   isSelected: boolean,
   type: 'workstation' | 'my' | 'all';
-  onItemClick?: (voiceModel: TypeVoiceModel) => void;
+  onItemClick?: (voiceModel: VoiceModelType) => void;
 }) {
   const [isPlay, setIsPlay] = useState(false);
 

@@ -1,14 +1,13 @@
 'use client';
 
 import Header from "@/app/ui/dashboard/Header";
-import { useRouter } from "@/navigation";
 import { getUserInfo } from "@/app/lib/user.api";
-import { getBags } from "@/app/lib/user.api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getIsLogin } from "@/app/lib/base.api";
 import { useTranslations } from "next-intl";
-import { TypeUser } from "@/app/lib/definitions.user";
+import { UserType } from "@/app/lib/definitions.user";
 import { UserContextProvider } from "@/app/contexts/UserContextProvider";
+import { hearbeat } from "@/app/lib/common.api";
 
 
 export default function DashboardLayout({
@@ -22,7 +21,7 @@ export default function DashboardLayout({
   const [isInit, setIsInit] = useState(false);
   const isLogin = getIsLogin();
 
-  const [userInfo, setUserInfo] = useState<TypeUser>({
+  const [userInfo, setUserInfo] = useState<UserType>({
     uid: '',
     name: '',
     email: '',
@@ -39,8 +38,19 @@ export default function DashboardLayout({
         email: res.data.email,
         wallet: res.data.wallet,
         avatar: res.data.avatar
-      } as TypeUser
+      } as UserType
       setUserInfo(user)
+    }
+  }
+
+
+  const hearbeatInterval:any = useRef()
+  const hearbeatApi = hearbeat();
+
+  const heartbeatServer = () => {
+    try {
+      hearbeatApi.send();
+    } catch {
     }
   }
 
@@ -48,6 +58,12 @@ export default function DashboardLayout({
     if (!isInit && isLogin) {
       setIsInit(true)
     }
+
+    hearbeatInterval.current = setInterval(() => {
+      heartbeatServer();
+    }, 1000 * 30);
+    
+    return () => clearInterval(hearbeatInterval.current);
   }, [])
 
   useEffect(() => {

@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import VoicePreview from "./VoicePreview";
 import { Checkbox, cn, Input, Select, SelectItem } from "@nextui-org/react";
-import { toneListEn, TypeTone } from "@/app/lib/definitions.tone";
+import { toneListEn, toneListZhCN } from "@/app/lib/definitions.tone";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { useLocale, useTranslations } from "next-intl";
 
 const formatTime = (seconds: any) =>
   [seconds / 60, seconds % 60]
@@ -35,6 +36,9 @@ function ToneVoiceFile({
   isDisabled?: boolean
   selected?: boolean
 }) {
+  const t = useTranslations();
+  const locale = useLocale();
+  const toneList = locale === "zh-CN" ? toneListZhCN : toneListEn;
   const [isSelected, setIsSelected] = useState(selected);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -49,7 +53,7 @@ function ToneVoiceFile({
               disallowEmptySelection={true}
               variant="flat"
               size="lg"
-              placeholder="Select an tone"
+              placeholder={t("PublishVoiceModel.toneVoiceFileLabel")}
               selectedKeys={[toneType as string]}
               classNames={{
                 // trigger: 'bg-zinc-700'
@@ -58,7 +62,7 @@ function ToneVoiceFile({
                 onToneTypeChange && onToneTypeChange(e.target.value)
               }}
             >
-              {toneListEn.map((tone) => (
+              {toneList.map((tone) => (
                 <SelectItem
                   key={tone.value}
                   value={tone.value}
@@ -96,7 +100,7 @@ function ToneVoiceFile({
             type="text"
             variant="bordered"
             color="default"
-            placeholder="Type context you want to convert here."
+            placeholder={t("PublishVoiceModel.toneVoiceFileToneText")}
             value={text}
             onChange={(e) => {
               onTextChange && onTextChange(e.target.value)

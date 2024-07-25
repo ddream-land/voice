@@ -18,7 +18,7 @@ export const languageListEn = [{
   label: "Japanese-English Mixed"
 }];
 
-export const languageListZhcn = [{
+export const languageListZhCN = [{
   value: "auto",
   label: "自动识别"
 }, {
@@ -38,7 +38,7 @@ export const languageListZhcn = [{
   label: "日英混合"
 }];
 
-export const segmentationMethodListZhcn = [{
+export const segmentationMethodListZhCN= [{
   value: "auto_cut",
   label: "智能切分"
 }, {

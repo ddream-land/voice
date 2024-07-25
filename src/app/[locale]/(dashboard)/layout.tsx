@@ -6,7 +6,7 @@ import DashboardLayout from "@/app/ui/dashboard/DashboardLayout";
 import { LoginContextProvider } from "@ddreamland/common";
 import { ExchangeContextProvider } from "@/app/ui/components/exchange-modal/ExchangeContextProvider";
 
-const locales = ["en"];
+const locales = ["en", "zh-CN"];
 
 export async function generateMetadata({
   params: { locale },
@@ -30,7 +30,6 @@ export default function RootLayout({
 }) {
   if (!locales.includes(locale as any)) notFound();
   const messages = useMessages();
-  
   return (
     <>
       <NextIntlClientProvider messages={messages}>

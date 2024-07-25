@@ -4,12 +4,15 @@ import Image from "next/image";
 import { VoiceModelPublishType } from "@/app/lib/definitions.voice";
 import GPTSovitsIcon from "@/app/icons/GPTSovitsIcon";
 import ToneVoicePreview from "../voice-preview/ToneVoicePreview";
+import { useTranslations } from "next-intl";
 
 function VoiceAssetDetailLeft({
   voicePublishInfo, 
 }: {
   voicePublishInfo: VoiceModelPublishType
 }) {
+  const t = useTranslations();
+  
   return (
     <div className="w-full flex-col justify-start items-start gap-8 flex">
       <div className="justify-center items-start gap-2.5 flex flex-col">
@@ -54,7 +57,7 @@ function VoiceAssetDetailLeft({
       <div className="self-stretch flex-col justify-start items-start gap-6 flex">
         <div className="self-stretch justify-start items-center gap-2.5 inline-flex">
           <div className="text-white text-xl font-semibold leading-7">
-            Tones Preview
+            {t("VoiceModelDetail.tonesPreview")}
           </div>
         </div>
         <div className="self-stretch flex-col justify-start items-start gap-4 flex">

@@ -11,7 +11,8 @@ import TitleModal from "./TitleModal";
 import ToneVoiceFileList from "../voice-preview/ToneVoiceFileList";
 import { getModelList, getVoiceModelInfo } from "@/app/lib/voice.api";
 import { VoiceModelInfoType } from "@/app/lib/definitions.voice";
-import { languageListEn } from "@/app/lib/definitions.select";
+import { languageListEn, languageListZhCN } from "@/app/lib/definitions.select";
+import { useLocale, useTranslations } from "next-intl";
 
 type myModelType = {
   task_id: string
@@ -29,6 +30,9 @@ function SelectVoiceModelForm({
   modelId?: string | undefined,
   onChange?: (newFormData: VoiceModelFormDataProps) => void,
 }) {
+  const t = useTranslations();
+  const locale = useLocale();
+  const languageList = locale === "zh-CN" ? languageListZhCN : languageListEn;
   const [loading, setLoading] = useState(false);
   const [myModelList, setMyModelList] = useState<Array<myModelType>>([])
 
@@ -81,15 +85,15 @@ function SelectVoiceModelForm({
   return (
     <>
       <div className="w-full flex-col justify-start items-start gap-12 flex">
-        <TitleModal title="Select Model" />
+        <TitleModal title={t('PublishVoiceModel.selectModelTitle')} />
         <div className="self-stretch flex-col justify-start items-start gap-8 flex">
-          <LabelForm label='Select' isRequired={true}>
+          <LabelForm label={t('PublishVoiceModel.selectModelLabel')} isRequired={true}>
             <Select
               isDisabled={!!modelId ? true : false}
               disallowEmptySelection={true}
               variant="bordered"
               size="lg"
-              placeholder="Select model type"
+              placeholder={t('PublishVoiceModel.modelPlaceholder')}
               labelPlacement="outside"
               selectedKeys={[formData.model_id]}
               defaultSelectedKeys={[modelId || '']}
@@ -121,13 +125,13 @@ function SelectVoiceModelForm({
             </Select>
           </LabelForm>
           
-          <LabelForm label='Basic Parameters' isRequired={true}>
+          <LabelForm label={t('PublishVoiceModel.basicParametersLabel')} isRequired={true}>
             <Select
               disallowEmptySelection={true}
               variant="bordered"
               size="lg"
-              label="Language"
-              placeholder="Select an language"
+              label={t('PublishVoiceModel.languageLabel')}
+              placeholder={t('PublishVoiceModel.languagePlaceholder')}
               labelPlacement="outside"
               selectedKeys={[formData.basic_params.language]}
               classNames={{
@@ -143,7 +147,7 @@ function SelectVoiceModelForm({
                 } as VoiceModelFormDataProps)
               }}
             >
-              {languageListEn.map((lang) => (
+              {languageList.map((lang) => (
                 <SelectItem
                   key={lang.value}
                   value={lang.value}
@@ -156,7 +160,7 @@ function SelectVoiceModelForm({
               ))}
             </Select>
           </LabelForm>
-          <LabelForm label='Tone Audio Files（Sentimental Voices）' subTitle="You may add up to 21 different tones, and the first one will be set as default." isRequired={true}>
+          <LabelForm label={t('PublishVoiceModel.toneVoiceFileListLabel')} subTitle={t('PublishVoiceModel.toneVoiceFileListSubTitle')} isRequired={true}>
             <ToneVoiceFileList
               key={formData.model_id + "-" + selectToneList.length}
               toneList={formData.tone}

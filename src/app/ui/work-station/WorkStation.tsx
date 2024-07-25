@@ -1,17 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { Link, useRouter } from "@/navigation";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import MainStation from "./MainStation";
 import VoiceHistory from "../components/voice-inf-history/VoiceHistory";
 import { InfType, VoiceInfHistoryType } from "@/app/lib/definitions.voice";
 
 function WorkStation() {
-  const router = useRouter();
   const t = useTranslations();
-  const amDispatch = useAmDispatch();
 
   const [voiceHistoryKey, setVoiceHistoryKey] = useState(0);
   const [sending, setSending] = useState(false);

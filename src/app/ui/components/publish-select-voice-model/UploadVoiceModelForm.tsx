@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import {
   VoiceModelFormDataProps,
@@ -9,7 +9,8 @@ import LabelForm from "../form/LabelForm";
 import TitleModal from "./TitleModal";
 import ToneVoiceFileList from "../voice-preview/ToneVoiceFileList";
 import UploadVoiceModelFile from "../upload-file/UploadVoiceModelFile";
-import { languageListEn } from "@/app/lib/definitions.select";
+import { languageListEn, languageListZhCN } from "@/app/lib/definitions.select";
+import { useLocale, useTranslations } from "next-intl";
 
 
 function UploadVoiceModelForm({
@@ -19,7 +20,10 @@ function UploadVoiceModelForm({
   formData: VoiceModelFormDataProps
   onChange?: (newFormData: VoiceModelFormDataProps) => void,
 }) {
-
+  const locale = useLocale();
+  const languageList = locale === "zh-CN" ? languageListZhCN : languageListEn;
+  
+  const t = useTranslations();
   const modalTypeList = [
     {
       value: "shide",
@@ -35,14 +39,14 @@ function UploadVoiceModelForm({
 
   return (
     <div className="w-full flex-col justify-start items-start gap-12 flex">
-      <TitleModal title="Upload Model" />
+      <TitleModal title={t("PublishVoiceModel.uploadModelTitle")} />
       <div className="self-stretch flex-col justify-start items-start gap-8 flex">
-        <LabelForm label='Type' isRequired={true}>
+        <LabelForm label={t("PublishVoiceModel.typeLabel")} isRequired={true}>
           <Select
             variant="bordered"
             size="lg"
             isRequired
-            placeholder="Select type"
+            placeholder={t("PublishVoiceModel.typePlaceholder")}
             selectedKeys={[formData.local_model.type as string]}
             onChange={(e) => {
               onChange && onChange({
@@ -70,14 +74,10 @@ function UploadVoiceModelForm({
         </LabelForm>
 
         <div className="w-full h-32 grid grid-cols-2 gap-12">
-          <LabelForm label='GPT Model' isRequired={true}>
+          <LabelForm label={t("PublishVoiceModel.GPTModelLabel")} isRequired={true}>
             <UploadVoiceModelFile
               label={
-                <div>
-                  Drag and drop files here or click to upload
-                  <br />
-                  CKPT format
-                </div>
+                <div>{t("PublishVoiceModel.GPTModelPlaceholder")}</div>
               }
               icon={<ArrowUpTrayIcon className="w-6 h-6 fill-zinc-400 " />}
               modelId={formData.model_id}
@@ -93,14 +93,10 @@ function UploadVoiceModelForm({
               }}
             ></UploadVoiceModelFile>
           </LabelForm>
-          <LabelForm label='Sovits Model' isRequired={true}>
+          <LabelForm label={t("PublishVoiceModel.sovitsModelLabel")} isRequired={true}>
             <UploadVoiceModelFile
               label={
-                <div>
-                  Drag and drop files here or click to upload
-                  <br />
-                  PTH format
-                </div>
+                <div>{t("PublishVoiceModel.sovitsModelPlaceholder")}</div>
               }
               icon={<ArrowUpTrayIcon className="w-6 h-6 fill-zinc-400 " />}
               modelId={formData.model_id}
@@ -117,13 +113,13 @@ function UploadVoiceModelForm({
             ></UploadVoiceModelFile>
           </LabelForm>
         </div>
-        <LabelForm label='Basic Parameters' isRequired={true}>
+        <LabelForm label={t("PublishVoiceModel.basicParametersLabel")} isRequired={true}>
           <Select
             disallowEmptySelection={true}
             variant="bordered"
             size="lg"
-            label="Language"
-            placeholder="Select an language"
+            label={t("PublishVoiceModel.languageLabel")}
+            placeholder={t("PublishVoiceModel.languagePlaceholder")}
             labelPlacement="outside"
             selectedKeys={[formData.basic_params.language as string]}
             classNames={{
@@ -139,7 +135,7 @@ function UploadVoiceModelForm({
               } as VoiceModelFormDataProps)
             }}
           >
-            {languageListEn.map((lang) => (
+            {languageList.map((lang) => (
               <SelectItem
                 key={lang.value}
                 value={lang.value}
@@ -153,7 +149,7 @@ function UploadVoiceModelForm({
           </Select>
         </LabelForm>
 
-        <LabelForm label='Tone Audio Files（Sentimental Voices）' subTitle="You may add up to 21 different tones, and the first one will be set as default." isRequired={true}>
+        <LabelForm label={t("PublishVoiceModel.toneVoiceFileListLabel")} subTitle={t("PublishVoiceModel.toneVoiceFileListSubTitle")} isRequired={true}>
           <ToneVoiceFileList
             toneList={formData.tone}
             modelId={formData.model_id}

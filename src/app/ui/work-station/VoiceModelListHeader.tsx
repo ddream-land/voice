@@ -1,10 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
-import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { Tab, Tabs } from "@nextui-org/react";
-import NuwaChipRadioGroup from "../components/NuwaChipRadioGroup";
 import { VoiceModelFilterType } from "@/app/lib/definitions.voice";
 
 type TypeFilterItem = {
@@ -22,13 +20,14 @@ function VoiceListHeader({
   filters: VoiceModelFilterType,
   onChange: (newFilters: VoiceModelFilterType) => void
 }) {
+  const t = useTranslations();
   const router = useRouter();
 
   return (
     <div className="self-stretch justify-between items-center inline-flex bg-neutral-900 px-8 pt-10 w-full">
       <div className="h-[41px] justify-start items-center gap-6 flex">
         <div className="text-white text-xl font-semibold leading-normal">
-          Voices
+          {t("WorkStation.voiceTitle")}
         </div>
       </div>
 
@@ -45,9 +44,9 @@ function VoiceListHeader({
           panel: "p-0 w-full"
         }}
       >
-        <Tab key="browse" title="Recent">
+        <Tab key="browse" title={t("WorkStation.filterRecent")}>
         </Tab>
-        <Tab key="collection" title="Collection">
+        <Tab key="collection" title={t("WorkStation.filterCollection")}>
         </Tab>
       </Tabs>
     </div>

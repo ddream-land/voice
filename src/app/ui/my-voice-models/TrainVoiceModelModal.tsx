@@ -220,7 +220,7 @@ function TrainVoiceModelModal({
                   <div className="h-6 pl-1 pr-2 py-0.5 bg-green-500 rounded-md justify-center items-center gap-1 flex">
                     <WholeNoteIcon className="w-4 h-4 fill-neutral-900 stroke-neutral-900 relative" />
                     <div className="text-center text-neutral-900 text-xs font-semibold ">
-                      X 400
+                      X 650
                     </div>
                   </div>
                 }

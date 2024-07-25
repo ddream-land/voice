@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { Accordion, AccordionItem, Button, Tab, Tabs } from "@nextui-org/react";
 import ResetIcon from "@/app/icons/ResetIcon";
@@ -17,7 +16,6 @@ function MainStationControlParameters({
   value: InstantGenerateParamsterType;
   onChange: (newValue: InstantGenerateParamsterType) => void;
 }) {
-  const router = useRouter();
   const t = useTranslations();
   const [selected, setSelected] = useState("basics");
   const [isReset, setIsReset] = useState(false);
@@ -55,7 +53,7 @@ function MainStationControlParameters({
         <AccordionItem
           key="1"
           aria-label="Parameters"
-          title="Parameters"
+          title={t("VoiceInf.parameters")}
           classNames={{
             base: "px-8 w-full bg-neutral-800/90 rounded-tl-2xl rounded-tr-2xl shadow backdrop-blur-[100px]",
             content: "pb-8"
@@ -68,9 +66,7 @@ function MainStationControlParameters({
                 className="text-gray-500 text-sm font-semibold "
                 startContent={<ResetIcon className={`h-5 w-5 text-current ${isReset && "-animate-spin"}`} />}
                 onClick={handleReset}
-              >
-              Reset
-              </Button> 
+              >{t("Button.reset")}</Button> 
             </div>
             <Tabs
               aria-label="Options"     
@@ -80,7 +76,7 @@ function MainStationControlParameters({
                 panel: "p-0 w-full h-[190px]"
               }}
             >
-              <Tab key="basics" title="Basics">
+              <Tab key="basics" title={t("VoiceInf.basics")}>
                 <VoiceParametersBasics 
                   value={value.basic_params}
                   onChange={(newValue) => {
@@ -91,7 +87,7 @@ function MainStationControlParameters({
                   }}
                 />
               </Tab>
-              <Tab key="advanced" title="Advanced">
+              <Tab key="advanced" title={t("VoiceInf.advanced")}>
                 <VoiceParametersAdvanced 
                   value={value.advance_params}
                   onChange={(newValue) => {

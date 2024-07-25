@@ -3,6 +3,7 @@ import React from "react";
 import { VoiceModelAdvancedParamsType } from "@/app/lib/definitions.voice";
 import { Input } from "@nextui-org/react";
 import NuwaSliderInput from "../NuwaSliderInput";
+import { useTranslations } from "next-intl";
 
 function VoiceParametersAdvanced({
   value,
@@ -12,16 +13,17 @@ function VoiceParametersAdvanced({
   onChange: (value:VoiceModelAdvancedParamsType)=>void,
 }) {
 
+  const t = useTranslations();
   return (
-    <div className="self-stretch rounded-xl justify-end items-center gap-x-12 gap-y-7 grid grid-cols-1 lg:grid-cols-2">
+    <div className="self-stretch rounded-xl justify-end items-center gap-x-12 gap-y-7 grid grid-cols-2 lg:grid-cols-2">
       <Input
         color="primary"
         variant="bordered"
         size="lg"
-        label="Seed"
         type="number"
         min={-1}
-        placeholder="Input seed"
+        label={t("VoiceInf.seedLabel")}
+        placeholder={t("VoiceInf.seedPlaceholder")}
         labelPlacement="outside"
         value={String(value.seed)}
         classNames={{
@@ -36,7 +38,7 @@ function VoiceParametersAdvanced({
         }}
       />
       <NuwaSliderInput
-        label="Top K"
+        label={t("VoiceInf.topKLabel")}
         step={1} 
         maxValue={50} 
         minValue={1}
@@ -44,7 +46,7 @@ function VoiceParametersAdvanced({
         onChange={(topK) => onChange({ ...value, top_k: topK })}
       />
       <NuwaSliderInput
-        label="Top P"
+        label={t("VoiceInf.topPLabel")}
         step={0.1} 
         maxValue={2} 
         minValue={0} 
@@ -52,7 +54,7 @@ function VoiceParametersAdvanced({
         onChange={(topP) => onChange({ ...value, top_p: topP })}
       />
       <NuwaSliderInput
-        label="Temperature"
+        label={t("VoiceInf.temperatureLabel")}
         step={0.1} 
         maxValue={2} 
         minValue={0.1}

@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Link, usePathname } from '@/navigation'
-import { useTranslations } from 'next-intl'
 import WholeNoteIcon from '@/app/icons/WholeNoteIcon'
 import { DDLSidebar } from '@ddreamland/common'
 import { cn, Skeleton } from '@nextui-org/react'
@@ -13,6 +12,8 @@ import UserPanel from '../components/user-panel/UserPanel'
 import { useExchangeDispatch } from '../components/exchange-modal/ExchangeContextProvider'
 import { getFinanceBags } from '@/app/lib/finance.api'
 import ExchangeBags from './ExchangeBags'
+import LangSwitcher from './LangSwitcher'
+import { useLocale, useTranslations } from 'next-intl'
 
 const navigation = [
   { name: 'Navigation.voiceasset', href: '/voiceasset', icon: VoiceAssetIcon, current: false },
@@ -24,6 +25,7 @@ const navigation = [
 export default function Header() {
   const t = useTranslations()
   const pathname = usePathname()
+  const locale = useLocale();
   navigation.forEach((item) => {
     item.current = false
     if (pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))) {
@@ -67,8 +69,8 @@ export default function Header() {
               >
                 {initRenderClient ? (
                   <DDLSidebar
-                    lang="en"
-                    title={{ name: 'Voice' }}
+                    lang={locale as any}
+                    title={{ name: t('Header.title') }}
                     minifyTimeout={0}
                     forceSize={"mini"}
                   ></DDLSidebar>
@@ -113,6 +115,7 @@ export default function Header() {
           </div>
         </div>
         <div className="h-9 justify-end items-center gap-3 flex">
+          <LangSwitcher />
           <ExchangeBags />
           <div className="w-9 h-9 relative">
             <div className="w-9 h-9 left-0 top-0 absolute rounded-[40px] justify-center items-center inline-flex">

@@ -9,6 +9,7 @@ import PublishVoiceModelModal from "../components/publish-select-voice-model/Pub
 import VoiceModelDownloadButton from "../components/voice-model-download-button/VoiceModelDownloadButton";
 import { taskRetrain } from "@/app/lib/voice.api";
 import FlashCircleIcon from "@/app/icons/FlashCircleIcon";
+import { useTranslations } from "next-intl";
 
 
 function TrainItem({
@@ -22,10 +23,10 @@ function TrainItem({
   onValueChange?: (selected: boolean) => void;
   onRetrain?: () => void;
 }) {
+  const t = useTranslations();
   const [selectModalOpen, setSelectModalOpen] = useState(false);
   const [startGptDownload, setStartGptDownload] = useState(0);
   const [startSovitsDownload, setStartSovitsDownload] = useState(0);
-  const [startDownload, setStartDownload] = useState(0);
   const [ retraining, setRetraining] = useState(false);
 
 
@@ -87,19 +88,19 @@ function TrainItem({
               (value.status === 3 && value.result === 2 && !value.retrain) && 'text-rose-600'
             ])}>
               {value.status === 1 && (
-                <span>In Queue...</span>
+                <span>{t("MyVoiceModels.statusInQueue")}</span>
               )}
               {value.status === 2 && (
-                <span>Training: completing in 20 mins...</span>
+                <span>{t("MyVoiceModels.statusTraining")}</span>
               )}
               {(value.status === 3 && value.result === 1) && (
-                <span>Completed</span>
+                <span>{t("MyVoiceModels.statusCompleted")}</span>
               )}
               {(value.status === 3 && value.result === 2 && value.retrain) && (
-                <span>Retry Failed. Dream Token Refunded</span>
+                <span>{t("MyVoiceModels.statusRetryFailed")}</span>
               )}
               {(value.status === 3 && value.result === 2 && !value.retrain) && (
-                <span>Failed</span>
+                <span>{t("MyVoiceModels.statusFailed")}</span>
               )}
             </div>
           </div>
@@ -109,7 +110,6 @@ function TrainItem({
       <div className="justify-start items-center gap-2 flex">
         {(value.status === 3 && value.result === 1) && (
           <>
-            {/* <Button variant="light" className="text-zinc-400" startContent={<BeakerIcon className="w-5 h-5" />} onPress={() => {setIsOpen(true)}}>Run on WorkStation</Button> */}
             <VoiceModelDownloadButton
               modelId={value.task_param.model_id}
               type="gpt"
@@ -122,9 +122,9 @@ function TrainItem({
               startDownload={startSovitsDownload}
               onDownloading={() => {}}
             />
-            <Button variant="light" className="text-zinc-400" onPress={() => {setStartGptDownload(startGptDownload + 1)}}>Download CKPT File</Button>
-            <Button variant="light" className="text-zinc-400" onPress={() => {setStartSovitsDownload(startSovitsDownload + 1)}}>Download PTH File</Button>
-            <Button variant="light" className="text-zinc-400" onPress={() => {setSelectModalOpen(true)}}>Publish</Button>
+            <Button variant="light" className="text-zinc-400" onPress={() => {setStartGptDownload(startGptDownload + 1)}}>{t("Button.downloadCKPTFile")}</Button>
+            <Button variant="light" className="text-zinc-400" onPress={() => {setStartSovitsDownload(startSovitsDownload + 1)}}>{t("Button.downloadPTHFile")}</Button>
+            <Button variant="light" className="text-zinc-400" onPress={() => {setSelectModalOpen(true)}}>{t("Button.publish")}</Button>
             <PublishVoiceModelModal
               key={'selectModalOpen'+ selectModalOpen.toString()}
               variant="SELECT"
@@ -139,7 +139,7 @@ function TrainItem({
         )}
         <>
         {(value.result === 2 && !value.retrain) && (
-          <Button variant="light" className="text-zinc-400" onPress={() => {onTaskRetrainHandler()}}>Retry</Button>
+          <Button variant="light" className="text-zinc-400" onPress={() => {onTaskRetrainHandler()}}>{t("Button.retry")}</Button>
         )}
         </>
       </div>
