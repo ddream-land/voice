@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ddreamland/common": "^0.0.51",
+    "@ddreamland/common": "^0.0.53",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@metaplex-foundation/js": "^0.20.1",

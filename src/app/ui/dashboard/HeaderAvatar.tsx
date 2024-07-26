@@ -10,6 +10,7 @@ import { LoginModal } from "@ddreamland/common";
 export default function HeaderAvatar() {
   const router = useRouter();
   const locale = useLocale();
+  debugger
 
   const user = useUser();
   const isLogin = getIsLogin();

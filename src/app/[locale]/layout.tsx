@@ -21,6 +21,7 @@ export default function RootLayout({
   params: any;
 }) {
   if (!locales.includes(locale as any)) notFound();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={locale === 'en' ? roboto.className : pingFangSCFont.className}>
