@@ -13,6 +13,8 @@ export function uploadFileToServer(onUploadProgress: any) {
     url: commonUrlList.uploadFile,
     isBody: true,
     isUpload: true,
+    mustLogin: true,
+    noLoginGotoLogin: true,
     onUploadProgress: onUploadProgress
   })
 }

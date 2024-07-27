@@ -157,6 +157,24 @@
     "statusCompleted": "Completed",
     "statusRetryFailed": "Retry Failed. Refunded!"
   },
+  "TrainVoiceModelModal": {
+    "headerTitle": "Train My Voice Model",
+    "headerDescription": "For best result, upload a clear 6-12 mins audio clip (anything beyond 12 mins will be clipped). Avoid background noise.",
+    "learnMore": "Learn More",
+    "learnMoreLink": "https://docs.ddream.land/ddream-open-api/ai-voice-services/voice-tone-training",
+    "uploadFileLabel1": "Upload Sound File",
+    "uploadFileLabel2": "Click or drag to upload an audio file Supported formats: MP3/WAV/FLAC",
+    "taskNameLabel": "Task Name",
+    "taskNamePlaceholder": "e.g. Alan Turing",
+    "agree": "I agree with the following information",
+    "agreeRule1": "Only English, Mandarin, and Japanese are supported currently. Please follow us for future updates...",
+    "agreeRule2": "Please make sure the sound is clear and in single-character.",
+    "agreeRule3": "Please ensure your audio file is free from intellectual property conflicts. We cannot differentiate user-generated content and therefore cannot assume any associated liability.",
+    "agreeRule4": "Please ensure the audio quality meets the minimum standards for the training model. Extremely low quality may result in training failure, and any fees paid for this process will not be refundable.",
+    "startTrainingBtn": "Start Training",
+    "soundFileIsRequired": "Please upload a sound file",
+    "taskNameIsRequired": "Task name is required"
+  },
   "PublishedVoices": {
     "title": "Voices",
     "empty": "It seems like there's nothing here. Try to do something."

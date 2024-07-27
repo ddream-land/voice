@@ -54,16 +54,16 @@ function ExchangeItem({
       >
         <div className="bg-[url('/imgs/exchange-bg.png')] bg-cover w-full h-full flex flex-col-reverse items-center justify-start rounded-2xl overflow-hidden">
           <div className="text-center text-gray-200 text-[42px] font-bold  my-6">+{value.product_num}</div>
-          {value.product_num > 100 && value.product_num < 600 && (
+          {value.product_num > 2000 && value.product_num < 6000 && (
             <div className="flex flex-row justify-center items-center w-full gap-1">
               <WholeNoteIcon className="w-[58px] h-[58px]" />
               <WholeNoteIcon className="w-[58px] h-[58px]" />
             </div>
           )}
-          {value.product_num < 100 && (
+          {value.product_num < 2000 && (
             <WholeNoteIcon className="w-[58px] h-[58px]" />
           )}
-          {value.product_num > 600 && (
+          {value.product_num > 6000 && (
             <div className=" relative h-[92px] w-[70px] flex flex-row justify-center items-end">
               <WholeNoteIcon className="w-[60px] h-[60px]" />
               <div className="absolute right-0 top-0">

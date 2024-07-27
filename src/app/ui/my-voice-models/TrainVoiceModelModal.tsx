@@ -22,6 +22,8 @@ import { z } from "zod";
 import { useAmDispatch } from "../components/alter-message/AlterMessageContextProvider";
 import { handleConfetti } from "@/app/lib/utils";
 import { useExchangeDispatch } from "../components/exchange-modal/ExchangeContextProvider";
+import { useTransform } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 function TrainVoiceModelModal({
   isOpen = false,
@@ -32,6 +34,7 @@ function TrainVoiceModelModal({
   onChange: (isOpen: boolean) => void; // 类型定义为函数，用于处理模态框的打开和关闭
   onDone?: () => void; // 类型定义为函数，用于处理模态框的完成
 }) {
+  const t = useTranslations();
 
   const [sending, setSending] = useState(false);
 
@@ -80,13 +83,13 @@ function TrainVoiceModelModal({
 
   const FormSchema = z.object({
     file: z.string({
-      required_error: "video file is required",
-      invalid_type_error: "video file is required",
-    }).url({message: 'Please upload a video file'}), 
+      required_error: t("TrainVoiceModelModal.soundFileIsRequired"),
+      invalid_type_error: t("TrainVoiceModelModal.soundFileIsRequired"),
+    }).url({message: t("TrainVoiceModelModal.soundFileIsRequired")}), 
     task_name: z.string({
-      required_error: "task name is required",
-      invalid_type_error: "task name must be a string",
-    }).min(1, { message: "task namel is required" }),
+      required_error: t("TrainVoiceModelModal.taskNameIsRequired"),
+      invalid_type_error: t("TrainVoiceModelModal.taskNameIsRequired"),
+    }).min(1, { message: t("TrainVoiceModelModal.taskNameIsRequired") }),
   });
 
   const submitHandler = async () => {
@@ -135,8 +138,8 @@ function TrainVoiceModelModal({
           <>
             <ModalHeader>
               <div className="flex flex-col">
-                <div className="text-white text-2xl font-bold leading-loose">Train My Voice Model</div>
-                <div className="self-stretch"><span className="text-white text-sm font-normal leading-tight">For best result, upload a clear 6-12 mins audio clip (anything beyond 12 mins will be clipped). Avoid background noise.</span><span className="text-blue-600 text-sm font-normal leading-tight"> </span><a href="https://docs.ddream.land/ddream-open-api/ai-voice-services/voice-tone-training" target="_blank" className="text-blue-600 text-sm font-semibold leading-tight">{'Learn More >'}</a></div>
+                <div className="text-white text-2xl font-bold leading-loose">{t("TrainVoiceModelModal.headerTitle")}</div>
+                <div className="self-stretch"><span className="text-white text-sm font-normal leading-tight">{t("TrainVoiceModelModal.headerDescription")}</span><span className="text-blue-600 text-sm font-normal leading-tight"> </span><a href={t("TrainVoiceModelModal.learnMoreLink")} target="_blank" className="text-blue-600 text-sm font-semibold leading-tight">{t("TrainVoiceModelModal.learnMore")}{' >'}</a></div>
               </div>
             </ModalHeader>
             <ModalBody>
@@ -147,8 +150,8 @@ function TrainVoiceModelModal({
                       <UploadFile
                         label={
                           <div className="flex-col justify-center items-center gap-2.5 flex">
-                            <div className="text-white text-sm font-semibold leading-tight">Upload Sound File</div>
-                            <div className="w-[405px] text-center text-zinc-400 text-xs font-medium ">Click or drag to upload an audio file Supported formats: MP3/WAV/FLAC</div>
+                            <div className="text-white text-sm font-semibold leading-tight">{t("TrainVoiceModelModal.uploadFileLabel1")}</div>
+                            <div className="w-[405px] text-center text-zinc-400 text-xs font-medium ">{t("TrainVoiceModelModal.uploadFileLabel2")}</div>
                           </div>
                         }
                         icon={<BDocumentIcon className='h-6 w-6' />}
@@ -168,7 +171,7 @@ function TrainVoiceModelModal({
                   
                   {/* <TrainVoiceFilePreview voiceSrc={"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} onTrashClick={() => setVoiceSrc(null)} /> */}
 
-                  <LabelForm label="Task Name" isRequired={true}>
+                  <LabelForm label={t("TrainVoiceModelModal.taskNameLabel")} isRequired={true}>
                     <Input
                       classNames={{
                         base: "grow",
@@ -177,7 +180,7 @@ function TrainVoiceModelModal({
                       variant="bordered"
                       isRequired
                       color="default"
-                      placeholder="e.g. Alan Turing"
+                      placeholder={t("TrainVoiceModelModal.taskNamePlaceholder")} 
                       value={taskName}
                       onChange={(e) => setTaskName(e.target.value)}
                     />
@@ -196,14 +199,14 @@ function TrainVoiceModelModal({
                   <div className="self-stretch flex-col justify-start items-start flex">
                     <div className="self-stretch py-2 justify-start items-center gap-2 inline-flex">
                       <Checkbox isSelected={isAgree} onValueChange={setIsAgree} size="sm"></Checkbox>
-                      <div className="grow shrink basis-0 text-zinc-400 text-sm font-normal leading-tight">I agree with the following information</div>
+                      <div className="grow shrink basis-0 text-zinc-400 text-sm font-normal leading-tight">{t("TrainVoiceModelModal.agree")}</div>
                     </div>
                     <div className="self-stretch px-12 justify-start items-start inline-flex">
                       <ul className="w-full list-disc">
-                        <li className="text-zinc-400 text-sm font-normal leading-tight">Only English, Mandarin, and Japanese are supported currently. Please follow us for future updates...</li>
-                        <li className="text-zinc-400 text-sm font-normal leading-tight">Please make sure the sound is clear and in single-character.</li>
-                        <li className="text-zinc-400 text-sm font-normal leading-tight">Please ensure your audio file is free from intellectual property conflicts. We cannot differentiate user-generated content and therefore cannot assume any associated liability.</li>
-                        <li className="text-zinc-400 text-sm font-normal leading-tight">Please ensure the audio quality meets the minimum standards for the training model. Extremely low quality may result in training failure, and any fees paid for this process will not be refundable.</li>
+                        <li className="text-zinc-400 text-sm font-normal leading-tight">{t("TrainVoiceModelModal.agreeRule1")}</li>
+                        <li className="text-zinc-400 text-sm font-normal leading-tight">{t("TrainVoiceModelModal.agreeRule2")}</li>
+                        <li className="text-zinc-400 text-sm font-normal leading-tight">{t("TrainVoiceModelModal.agreeRule3")}</li>
+                        <li className="text-zinc-400 text-sm font-normal leading-tight">{t("TrainVoiceModelModal.agreeRule4")}</li>
                       </ul>
                     </div>
                   </div>
@@ -229,7 +232,7 @@ function TrainVoiceModelModal({
                 onPress={() => {
                   submitHandler();
                 }}
-              >Start Training</Button>
+              >{t("TrainVoiceModelModal.startTrainingBtn")}</Button>
             </ModalFooter>
           </>
         )}

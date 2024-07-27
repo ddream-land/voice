@@ -92,7 +92,7 @@ function PublishedVoices() {
                   <DropdownItem key="online">{t("VoiceAsset.publishFormMyVoiceLib")}</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
-                <Button size="lg" variant="flat" className="w-[200px]" startContent={<DCubeIcon className="h-6 w-6 fill-zinc-400" />}>Train My Voice</Button>
+                <Button size="lg" variant="flat" className="w-[200px]" startContent={<DCubeIcon className="h-6 w-6 fill-zinc-400" />}>{t("VoiceAsset.trainMyVoiceBtn")}</Button>
               </div>
             </div>
           )}

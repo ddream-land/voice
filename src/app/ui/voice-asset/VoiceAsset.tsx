@@ -66,7 +66,7 @@ function VoiceAsset() {
             <div className="w-full h-full flex flex-col justify-center items-center gap-12">
               <div className="flex-col justify-center items-center gap-4 flex">
                 <EmptyIcon className="w-12 h-12" />
-                <div className="text-center text-zinc-500 text-sm font-medium ">It seems like there's nothing here. <br/>Try to do something.</div>
+                <div className="text-center text-zinc-500 text-sm font-medium ">{t("PublishedVoices.empty")}</div>
               </div>
               <div className="h-12 justify-start items-start gap-4 inline-flex">
                 <Dropdown>
