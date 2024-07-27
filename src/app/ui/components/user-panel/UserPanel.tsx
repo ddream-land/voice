@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import {
   Avatar,
   Button,
+  Divider,
   Listbox,
   ListboxItem,
   Popover,
@@ -175,13 +176,16 @@ export default function UserPanel({ className }: UserPanelProps) {
                     radius="full"
                   ></Avatar>
                   <div
-                    className={`ml-[10px] py-[6px] flex-1 overflow-hidden flex flex-col justify-center shrink-1`}
+                    className={`ml-[10px] flex-1 overflow-hidden flex flex-col justify-center shrink-1 gap-1`}
                   >
                     <div className={`flex flex-row items-center`}>
-                      <span className={`text-[#fff] text-[16px] font-bold truncate`}>
+                      <span className={`text-white text-[16px] font-bold truncate`}>
                         {userInfo.name}
                       </span>
                       <span className={`w-[16px] h-[16px] flex-none`}></span>
+                    </div>
+                    <div className={`text-zinc-400 text-xs truncate`}>
+                      {userInfo.uid}
                     </div>
                     {/* <div className={`flex flex-row items-center`}>
                       <span className={`text-[#FFB240] text-[12px] font-[500]`}>{usertype}</span>
