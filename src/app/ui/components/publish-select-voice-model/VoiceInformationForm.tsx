@@ -100,7 +100,7 @@ function VoiceInformationForm({
             ></UploadFile>
           </div>
         </LabelForm>
-        <LabelForm label={t("PublishVoiceModel.coverPlaceholder")} isRequired={true}>
+        <LabelForm label={t("PublishVoiceModel.namePlaceholder")} isRequired={true}>
           <Input
             classNames={{
               base: "grow",
