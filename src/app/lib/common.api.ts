@@ -22,6 +22,8 @@ export function uploadFileToServer(onUploadProgress: any) {
 export function hearbeat() {
   const t = useTranslations();
   return baseApiHander({
-    url: commonUrlList.hearbeat
+    url: commonUrlList.hearbeat,
+    mustLogin: true,
+    noLoginGotoLogin: false,
   })
 }
